@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Lightbulb, Eye, Send } from 'lucide-react';
@@ -9,17 +9,15 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Button, Card, Input, Textarea, Select, Badge } from '@/components/ui';
 
-const categories = [
-  { value: '1', label: 'Tools', icon: '🛠' },
-  { value: '2', label: 'Apps', icon: '📱' },
-  { value: '3', label: 'Games', icon: '🎮' },
-  { value: '4', label: 'Business', icon: '📊' },
-  { value: '5', label: 'Design', icon: '🎨' },
-  { value: '6', label: 'Education', icon: '📚' },
-];
+interface Category {
+  id: string;
+  name: string;
+  icon: string;
+}
 
 export default function SubmitIdeaPage() {
   const router = useRouter();
+  const [categories, setCategories] = useState<{ value: string; label: string; icon: string }[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [formData, setFormData] = useState({
@@ -30,6 +28,27 @@ export default function SubmitIdeaPage() {
   });
   const [tagInput, setTagInput] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Fetch categories from API
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch('/api/categories');
+        if (res.ok) {
+          const data = await res.json();
+          const cats = (data.data || data || []).map((cat: Category) => ({
+            value: cat.id,
+            label: cat.name,
+            icon: cat.icon,
+          }));
+          setCategories(cats);
+        }
+      } catch {
+        // Fallback to empty categories
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -71,8 +90,7 @@ export default function SubmitIdeaPage() {
 
       const data = await response.json();
       router.push(`/ideas/${data.id}`);
-    } catch (error) {
-      console.error('Error submitting idea:', error);
+    } catch {
       setErrors({ submit: 'Failed to submit idea. Please try again.' });
     } finally {
       setIsSubmitting(false);

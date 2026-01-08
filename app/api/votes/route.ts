@@ -23,10 +23,10 @@ export async function POST(request: NextRequest) {
       return errorResponse('Vote value must be 1 (upvote) or -1 (downvote)');
     }
 
-    // Check if idea exists
+    // Check if idea exists and get current vote count
     const { data: idea, error: ideaError } = await supabase
       .from('ideas')
-      .select('id')
+      .select('id, vote_count')
       .eq('id', ideaId)
       .single();
 
@@ -42,6 +42,10 @@ export async function POST(request: NextRequest) {
       .eq('user_id', session!.user.id)
       .single();
 
+    let newVoteCount = idea.vote_count || 0;
+    let resultValue = 0;
+    let action = '';
+
     if (existingVote) {
       if (existingVote.value === value) {
         // Same vote - remove it (toggle off)
@@ -55,7 +59,9 @@ export async function POST(request: NextRequest) {
           return errorResponse('Failed to remove vote', 500);
         }
 
-        return successResponse({ action: 'removed', value: 0 });
+        newVoteCount -= existingVote.value;
+        action = 'removed';
+        resultValue = 0;
       } else {
         // Different vote - update it
         const { error } = await supabase
@@ -68,7 +74,10 @@ export async function POST(request: NextRequest) {
           return errorResponse('Failed to update vote', 500);
         }
 
-        return successResponse({ action: 'updated', value });
+        // Remove old vote, add new vote
+        newVoteCount = newVoteCount - existingVote.value + value;
+        action = 'updated';
+        resultValue = value;
       }
     } else {
       // New vote
@@ -85,8 +94,18 @@ export async function POST(request: NextRequest) {
         return errorResponse('Failed to create vote', 500);
       }
 
-      return successResponse({ action: 'created', value }, 201);
+      newVoteCount += value;
+      action = 'created';
+      resultValue = value;
     }
+
+    // Update vote_count in ideas table
+    await supabase
+      .from('ideas')
+      .update({ vote_count: newVoteCount })
+      .eq('id', ideaId);
+
+    return successResponse({ action, value: resultValue, newVoteCount }, action === 'created' ? 201 : 200);
   } catch (error) {
     console.error('Error in POST /api/votes:', error);
     return errorResponse('Internal server error', 500);

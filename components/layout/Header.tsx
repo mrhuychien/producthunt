@@ -63,7 +63,7 @@ export function Header({ user }: HeaderProps) {
           {/* Right Side */}
           <div className="flex items-center gap-3">
             {/* Search Button */}
-            <Button variant="ghost" size="sm" className="hidden sm:flex">
+            <Button variant="ghost" size="sm" className="hidden sm:flex" aria-label="Search">
               <Search className="w-4 h-4" />
             </Button>
 
@@ -93,6 +93,8 @@ export function Header({ user }: HeaderProps) {
               size="sm"
               className="md:hidden"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? (
                 <X className="w-5 h-5" />
