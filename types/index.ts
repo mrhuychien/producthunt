@@ -1,0 +1,113 @@
+// User types
+export type UserRole = 'user' | 'admin';
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  image?: string;
+  role: UserRole;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Category types
+export interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  icon: string;
+  color: string;
+}
+
+// Idea status
+export type IdeaStatus = 'pending' | 'approved' | 'rejected' | 'in_progress' | 'built';
+
+// Idea types
+export interface Idea {
+  id: string;
+  title: string;
+  description: string;
+  categoryId: string;
+  category?: Category;
+  userId: string;
+  user?: User;
+  status: IdeaStatus;
+  isFeatured: boolean;
+  voteCount: number;
+  commentCount: number;
+  createdAt: Date;
+  updatedAt: Date;
+  tags?: Tag[];
+  userVote?: number; // 1, -1, or 0/undefined
+  isSaved?: boolean;
+}
+
+// Vote types
+export interface Vote {
+  id: string;
+  ideaId: string;
+  userId: string;
+  value: 1 | -1;
+  createdAt: Date;
+}
+
+// Comment types
+export interface Comment {
+  id: string;
+  ideaId: string;
+  userId: string;
+  user?: User;
+  parentId?: string;
+  content: string;
+  createdAt: Date;
+  updatedAt: Date;
+  replies?: Comment[];
+  likeCount?: number;
+}
+
+// Tag types
+export interface Tag {
+  id: string;
+  name: string;
+  slug: string;
+}
+
+// Saved Idea types
+export interface SavedIdea {
+  id: string;
+  ideaId: string;
+  userId: string;
+  createdAt: Date;
+}
+
+// API Response types
+export interface ApiResponse<T> {
+  data?: T;
+  error?: string;
+  message?: string;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
+// Form types
+export interface SubmitIdeaForm {
+  title: string;
+  description: string;
+  categoryId: string;
+  tags: string[];
+}
+
+// Filter types
+export interface IdeaFilters {
+  category?: string;
+  status?: IdeaStatus;
+  search?: string;
+  sortBy?: 'newest' | 'popular' | 'trending';
+}
