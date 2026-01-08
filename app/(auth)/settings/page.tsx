@@ -16,11 +16,17 @@ export default function SettingsPage() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      // TODO: Implement profile update API
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setIsEditing(false);
-    } catch (error) {
-      console.error('Error saving profile:', error);
+      const res = await fetch('/api/user/profile', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name }),
+      });
+
+      if (res.ok) {
+        setIsEditing(false);
+      }
+    } catch {
+      // Silent fail
     } finally {
       setIsSaving(false);
     }

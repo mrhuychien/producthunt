@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useParams, notFound } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
@@ -16,99 +17,131 @@ import {
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Button, Card, Badge, Textarea } from '@/components/ui';
+import { IdeaCardSkeleton } from '@/components/ui/Skeleton';
+import { ErrorMessage } from '@/components/ui/ErrorMessage';
 import { VoteButton } from '@/components/ideas/VoteButton';
 import { UserAvatar } from '@/components/shared/UserAvatar';
 import { formatRelativeTime, getStatusColor, getStatusLabel } from '@/lib/utils';
 import type { Idea, Comment } from '@/types';
 
-// Mock data
-const mockIdea: Idea = {
-  id: '1',
-  title: 'AI-Powered Code Review Tool',
-  description: `An intelligent tool that automatically reviews code and suggests improvements using machine learning.
-
-## Problem
-Code reviews are time-consuming and often inconsistent. Developers spend hours reviewing code when they could be building features.
-
-## Solution
-Build an AI-powered tool that:
-- Automatically detects bugs and security vulnerabilities
-- Suggests code improvements and best practices
-- Integrates with GitHub, GitLab, and Bitbucket
-- Learns from team preferences over time
-
-## Target Users
-- Software development teams
-- Open source maintainers
-- Individual developers
-
-## Why Now?
-With advances in LLMs and code understanding, we can now build tools that truly understand code context and provide meaningful suggestions.`,
-  categoryId: '1',
-  category: { id: '1', name: 'Tools', slug: 'tools', icon: '🛠', color: '#3B82F6' },
-  userId: '1',
-  user: { id: '1', name: 'John Doe', email: 'john@example.com', image: 'https://i.pravatar.cc/150?u=1', role: 'user', createdAt: new Date(), updatedAt: new Date() },
-  status: 'approved',
-  isFeatured: true,
-  voteCount: 234,
-  commentCount: 3,
-  createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-  updatedAt: new Date(),
-  tags: [{ id: '1', name: 'ai', slug: 'ai' }, { id: '2', name: 'developer-tools', slug: 'developer-tools' }],
-  isSaved: false,
-};
-
-const mockComments: Comment[] = [
-  {
-    id: '1',
-    ideaId: '1',
-    userId: '2',
-    user: { id: '2', name: 'Jane Smith', email: 'jane@example.com', image: 'https://i.pravatar.cc/150?u=2', role: 'user', createdAt: new Date(), updatedAt: new Date() },
-    content: 'This is a great idea! I would definitely use this. Have you considered integrating with VS Code directly?',
-    createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-    updatedAt: new Date(),
-  },
-  {
-    id: '2',
-    ideaId: '1',
-    userId: '3',
-    user: { id: '3', name: 'Bob Wilson', email: 'bob@example.com', image: 'https://i.pravatar.cc/150?u=3', role: 'user', createdAt: new Date(), updatedAt: new Date() },
-    content: 'I work on a similar project. Would love to collaborate on this. The key challenge is handling different programming languages consistently.',
-    createdAt: new Date(Date.now() - 12 * 60 * 60 * 1000),
-    updatedAt: new Date(),
-  },
-  {
-    id: '3',
-    ideaId: '1',
-    userId: '1',
-    user: mockIdea.user,
-    content: '@Bob Wilson That would be awesome! Yes, multi-language support is definitely a challenge. I was thinking of using tree-sitter for parsing.',
-    createdAt: new Date(Date.now() - 6 * 60 * 60 * 1000),
-    updatedAt: new Date(),
-  },
-];
-
 export default function IdeaDetailPage() {
   const params = useParams();
-  const [idea, setIdea] = useState<Idea>(mockIdea);
-  const [comments, setComments] = useState<Comment[]>(mockComments);
+  const { data: session } = useSession();
+  const [idea, setIdea] = useState<Idea | null>(null);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [newComment, setNewComment] = useState('');
-  const [isSaved, setIsSaved] = useState(false);
+  const [isSubmittingComment, setIsSubmittingComment] = useState(false);
 
-  const handleVote = (value: 1 | -1) => {
-    // TODO: Implement voting logic with API
-    setIdea((prev) => ({
-      ...prev,
-      voteCount: prev.voteCount + value,
-      userVote: value,
-    }));
+  const ideaId = params?.id as string;
+
+  // Fetch idea data
+  useEffect(() => {
+    const fetchIdea = async () => {
+      if (!ideaId) return;
+
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const res = await fetch(`/api/ideas/${ideaId}`);
+        if (res.status === 404) {
+          setError('not_found');
+          return;
+        }
+        if (!res.ok) {
+          throw new Error('Failed to fetch idea');
+        }
+        const data = await res.json();
+        setIdea(data.data);
+      } catch (err) {
+        setError('Failed to load idea. Please try again.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchIdea();
+  }, [ideaId]);
+
+  // Fetch comments
+  useEffect(() => {
+    const fetchComments = async () => {
+      if (!ideaId) return;
+
+      try {
+        const res = await fetch(`/api/comments?ideaId=${ideaId}`);
+        if (res.ok) {
+          const data = await res.json();
+          setComments(data.data || []);
+        }
+      } catch (err) {
+        // Comments fail silently
+      }
+    };
+
+    if (idea) {
+      fetchComments();
+    }
+  }, [ideaId, idea]);
+
+  const handleVote = async (value: 1 | -1) => {
+    if (!session) {
+      window.location.href = '/login';
+      return;
+    }
+    if (!idea) return;
+
+    try {
+      const res = await fetch('/api/votes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ideaId: idea.id, value }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setIdea(prev => prev ? {
+          ...prev,
+          voteCount: data.data.newVoteCount,
+          userVote: data.data.value,
+        } : null);
+      }
+    } catch (err) {
+      // Silent fail
+    }
   };
 
-  const handleSave = () => {
-    setIsSaved(!isSaved);
+  const handleSave = async () => {
+    if (!session) {
+      window.location.href = '/login';
+      return;
+    }
+    if (!idea) return;
+
+    try {
+      const res = await fetch('/api/saved', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ideaId: idea.id }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setIdea(prev => prev ? {
+          ...prev,
+          isSaved: data.data.saved,
+        } : null);
+      }
+    } catch (err) {
+      // Silent fail
+    }
   };
 
   const handleShare = async () => {
+    if (!idea) return;
+
     if (navigator.share) {
       await navigator.share({
         title: idea.title,
@@ -116,26 +149,87 @@ export default function IdeaDetailPage() {
         url: window.location.href,
       });
     } else {
-      // Fallback: copy to clipboard
       navigator.clipboard.writeText(window.location.href);
     }
   };
 
-  const handleSubmitComment = () => {
-    if (!newComment.trim()) return;
-    // TODO: Implement comment submission with API
-    const comment: Comment = {
-      id: String(comments.length + 1),
-      ideaId: idea.id,
-      userId: '1',
-      user: { id: '1', name: 'You', email: 'you@example.com', image: undefined, role: 'user', createdAt: new Date(), updatedAt: new Date() },
-      content: newComment,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    setComments([...comments, comment]);
-    setNewComment('');
+  const handleSubmitComment = async () => {
+    if (!newComment.trim() || !session || !idea) return;
+
+    setIsSubmittingComment(true);
+    try {
+      const res = await fetch('/api/comments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ideaId: idea.id,
+          content: newComment.trim(),
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setComments([...comments, data.data]);
+        setNewComment('');
+        // Update comment count
+        setIdea(prev => prev ? {
+          ...prev,
+          commentCount: (prev.commentCount || 0) + 1,
+        } : null);
+      }
+    } catch (err) {
+      // Silent fail
+    } finally {
+      setIsSubmittingComment(false);
+    }
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[var(--background)]">
+        <Header />
+        <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <IdeaCardSkeleton />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error === 'not_found') {
+    return (
+      <div className="min-h-screen bg-[var(--background)]">
+        <Header />
+        <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <ErrorMessage
+            message="Idea not found"
+            title="404"
+          />
+          <div className="mt-4 text-center">
+            <Link href="/ideas">
+              <Button variant="primary">Browse Ideas</Button>
+            </Link>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error || !idea) {
+    return (
+      <div className="min-h-screen bg-[var(--background)]">
+        <Header />
+        <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <ErrorMessage
+            message={error || 'Something went wrong'}
+            onRetry={() => window.location.reload()}
+          />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -252,12 +346,12 @@ export default function IdeaDetailPage() {
               {/* Actions */}
               <div className="flex items-center gap-2">
                 <Button
-                  variant={isSaved ? 'primary' : 'outline'}
+                  variant={idea.isSaved ? 'primary' : 'outline'}
                   size="sm"
                   onClick={handleSave}
-                  leftIcon={isSaved ? <BookmarkCheck className="w-4 h-4" /> : <Bookmark className="w-4 h-4" />}
+                  leftIcon={idea.isSaved ? <BookmarkCheck className="w-4 h-4" /> : <Bookmark className="w-4 h-4" />}
                 >
-                  {isSaved ? 'Saved' : 'Save'}
+                  {idea.isSaved ? 'Saved' : 'Save'}
                 </Button>
                 <Button
                   variant="outline"
@@ -293,58 +387,76 @@ export default function IdeaDetailPage() {
             </h2>
 
             {/* Comment Form */}
-            <div className="mb-8">
-              <Textarea
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                placeholder="Share your thoughts..."
-                className="mb-3"
-              />
-              <div className="flex justify-end">
-                <Button
-                  onClick={handleSubmitComment}
-                  disabled={!newComment.trim()}
-                  leftIcon={<Send className="w-4 h-4" />}
-                >
-                  Post Comment
-                </Button>
+            {session ? (
+              <div className="mb-8">
+                <Textarea
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  placeholder="Share your thoughts..."
+                  className="mb-3"
+                />
+                <div className="flex justify-end">
+                  <Button
+                    onClick={handleSubmitComment}
+                    disabled={!newComment.trim()}
+                    isLoading={isSubmittingComment}
+                    leftIcon={<Send className="w-4 h-4" />}
+                  >
+                    Post Comment
+                  </Button>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="mb-8 p-4 bg-[var(--surface)] rounded-lg text-center">
+                <p className="text-[var(--text-secondary)] mb-2">
+                  Sign in to leave a comment
+                </p>
+                <Link href="/login">
+                  <Button size="sm">Sign In</Button>
+                </Link>
+              </div>
+            )}
 
             {/* Comments List */}
             <div className="space-y-6">
-              {comments.map((comment) => (
-                <motion.div
-                  key={comment.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="flex gap-4"
-                >
-                  <UserAvatar
-                    src={comment.user?.image}
-                    name={comment.user?.name || 'Anonymous'}
-                    size="md"
-                  />
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-medium text-[var(--text-primary)]">
-                        {comment.user?.name}
-                      </span>
-                      <span className="text-sm text-[var(--text-secondary)]">
-                        {formatRelativeTime(comment.createdAt)}
-                      </span>
+              {comments.length === 0 ? (
+                <p className="text-center text-[var(--text-secondary)] py-4">
+                  No comments yet. Be the first to share your thoughts!
+                </p>
+              ) : (
+                comments.map((comment) => (
+                  <motion.div
+                    key={comment.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex gap-4"
+                  >
+                    <UserAvatar
+                      src={comment.user?.image}
+                      name={comment.user?.name || 'Anonymous'}
+                      size="md"
+                    />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-medium text-[var(--text-primary)]">
+                          {comment.user?.name}
+                        </span>
+                        <span className="text-sm text-[var(--text-secondary)]">
+                          {formatRelativeTime(comment.createdAt)}
+                        </span>
+                      </div>
+                      <p className="text-[var(--text-secondary)]">
+                        {comment.content}
+                      </p>
+                      <div className="mt-2">
+                        <Button variant="ghost" size="sm">
+                          Reply
+                        </Button>
+                      </div>
                     </div>
-                    <p className="text-[var(--text-secondary)]">
-                      {comment.content}
-                    </p>
-                    <div className="mt-2">
-                      <Button variant="ghost" size="sm">
-                        Reply
-                      </Button>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                ))
+              )}
             </div>
           </Card>
         </motion.div>
