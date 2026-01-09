@@ -5,9 +5,11 @@ import { motion } from 'framer-motion';
 import { Bookmark } from 'lucide-react';
 import { Card, Badge } from '@/components/ui';
 import { IdeaList } from '@/components/ideas/IdeaList';
+import { useLanguage } from '@/lib/i18n';
 import type { Idea } from '@/types';
 
 export default function SavedIdeasPage() {
+  const { t } = useLanguage();
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
@@ -87,17 +89,17 @@ export default function SavedIdeasPage() {
         className="mb-6"
       >
         <h1 className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)]">
-          Saved Ideas
+          {t.nav.saved}
         </h1>
         <p className="text-[var(--text-secondary)]">
-          Ideas you&apos;ve bookmarked for later
+          {t.dashboard.savedIdeas}
         </p>
       </motion.div>
 
       {/* Count Badge */}
       <div className="mb-4">
         <Badge variant="default">
-          {totalCount} saved idea{totalCount !== 1 ? 's' : ''}
+          {totalCount} {t.dashboard.savedIdeas}
         </Badge>
       </div>
 
@@ -109,7 +111,7 @@ export default function SavedIdeasPage() {
       >
         {isLoading ? (
           <Card className="p-8 text-center">
-            <p className="text-[var(--text-secondary)]">Loading...</p>
+            <p className="text-[var(--text-secondary)]">{t.common.loading}</p>
           </Card>
         ) : ideas.length > 0 ? (
           <IdeaList
@@ -121,10 +123,10 @@ export default function SavedIdeasPage() {
           <Card className="p-8 text-center">
             <Bookmark className="w-12 h-12 mx-auto text-[var(--text-secondary)] mb-4" />
             <h3 className="text-lg font-medium text-[var(--text-primary)] mb-2">
-              No saved ideas
+              {t.ideas.noResults}
             </h3>
             <p className="text-[var(--text-secondary)]">
-              Browse ideas and click the bookmark icon to save them here.
+              {t.ideas.noResultsDesc}
             </p>
           </Card>
         )}

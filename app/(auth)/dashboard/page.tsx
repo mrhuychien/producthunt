@@ -15,6 +15,7 @@ import {
 import { Card, Button, Badge } from '@/components/ui';
 import { IdeaCard } from '@/components/ideas/IdeaCard';
 import { UserAvatar } from '@/components/shared/UserAvatar';
+import { useLanguage } from '@/lib/i18n';
 import type { Idea } from '@/types';
 
 interface Stats {
@@ -26,6 +27,7 @@ interface Stats {
 
 export default function DashboardPage() {
   const { data: session } = useSession();
+  const { t } = useLanguage();
   const [stats, setStats] = useState<Stats>({ ideas: 0, votesReceived: 0, comments: 0, saved: 0 });
   const [recentIdeas, setRecentIdeas] = useState<Idea[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -57,10 +59,10 @@ export default function DashboardPage() {
   }, []);
 
   const statCards = [
-    { label: 'My Ideas', value: stats.ideas, icon: Lightbulb, color: 'text-indigo-600 bg-indigo-100' },
-    { label: 'Votes Received', value: stats.votesReceived, icon: ThumbsUp, color: 'text-green-600 bg-green-100' },
-    { label: 'Comments', value: stats.comments, icon: MessageCircle, color: 'text-blue-600 bg-blue-100' },
-    { label: 'Saved Ideas', value: stats.saved, icon: Bookmark, color: 'text-purple-600 bg-purple-100' },
+    { label: t.nav.myIdeas, value: stats.ideas, icon: Lightbulb, color: 'text-indigo-600 bg-indigo-100' },
+    { label: t.dashboard.totalVotes, value: stats.votesReceived, icon: ThumbsUp, color: 'text-green-600 bg-green-100' },
+    { label: t.dashboard.totalComments, value: stats.comments, icon: MessageCircle, color: 'text-blue-600 bg-blue-100' },
+    { label: t.dashboard.savedIdeas, value: stats.saved, icon: Bookmark, color: 'text-purple-600 bg-purple-100' },
   ];
 
   return (
@@ -79,10 +81,10 @@ export default function DashboardPage() {
           />
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)]">
-              Welcome back, {session?.user?.name?.split(' ')[0]}!
+              {t.dashboard.welcome}, {session?.user?.name?.split(' ')[0]}!
             </h1>
             <p className="text-[var(--text-secondary)]">
-              Here&apos;s what&apos;s happening with your ideas
+              {t.dashboard.title}
             </p>
           </div>
         </div>
@@ -121,22 +123,22 @@ export default function DashboardPage() {
       >
         <Card className="p-6">
           <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">
-            Quick Actions
+            {t.dashboard.quickActions}
           </h2>
           <div className="flex flex-wrap gap-3">
             <Link href="/submit">
               <Button leftIcon={<Lightbulb className="w-4 h-4" />}>
-                Submit New Idea
+                {t.nav.submitIdea}
               </Button>
             </Link>
             <Link href="/ideas">
               <Button variant="outline" leftIcon={<TrendingUp className="w-4 h-4" />}>
-                Browse Trending
+                {t.landing.ctaBrowse}
               </Button>
             </Link>
             <Link href="/saved">
               <Button variant="ghost" leftIcon={<Bookmark className="w-4 h-4" />}>
-                View Saved
+                {t.nav.saved}
               </Button>
             </Link>
           </div>
@@ -151,18 +153,18 @@ export default function DashboardPage() {
       >
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-[var(--text-primary)]">
-            My Recent Ideas
+            {t.dashboard.recentIdeas}
           </h2>
           <Link href="/my-ideas">
             <Button variant="ghost" size="sm" rightIcon={<ArrowRight className="w-4 h-4" />}>
-              View All
+              {t.landing.viewAll}
             </Button>
           </Link>
         </div>
 
         {isLoading ? (
           <Card className="p-8 text-center">
-            <p className="text-[var(--text-secondary)]">Loading...</p>
+            <p className="text-[var(--text-secondary)]">{t.common.loading}</p>
           </Card>
         ) : recentIdeas.length > 0 ? (
           <div className="space-y-4">
@@ -174,13 +176,13 @@ export default function DashboardPage() {
           <Card className="p-8 text-center">
             <Lightbulb className="w-12 h-12 mx-auto text-[var(--text-secondary)] mb-4" />
             <h3 className="text-lg font-medium text-[var(--text-primary)] mb-2">
-              No ideas yet
+              {t.ideas.noResults}
             </h3>
             <p className="text-[var(--text-secondary)] mb-4">
-              Share your first idea with the community!
+              {t.ideas.beFirst}
             </p>
             <Link href="/submit">
-              <Button>Submit Your First Idea</Button>
+              <Button>{t.landing.ctaSubmit}</Button>
             </Link>
           </Card>
         )}

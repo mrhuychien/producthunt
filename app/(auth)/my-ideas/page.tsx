@@ -6,21 +6,23 @@ import Link from 'next/link';
 import { Lightbulb, Plus, Filter } from 'lucide-react';
 import { Card, Button, Badge } from '@/components/ui';
 import { IdeaCard } from '@/components/ideas/IdeaCard';
+import { useLanguage } from '@/lib/i18n';
 import type { Idea, IdeaStatus } from '@/types';
 
-const statusFilters: { value: IdeaStatus | 'all'; label: string }[] = [
-  { value: 'all', label: 'All' },
-  { value: 'approved', label: 'Open' },
-  { value: 'in_progress', label: 'In Progress' },
-  { value: 'built', label: 'Built' },
-  { value: 'pending', label: 'Pending' },
-];
-
 export default function MyIdeasPage() {
+  const { t } = useLanguage();
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<IdeaStatus | 'all'>('all');
   const [totalCount, setTotalCount] = useState(0);
+
+  const statusFilters: { value: IdeaStatus | 'all'; label: string }[] = [
+    { value: 'all', label: t.common.all },
+    { value: 'approved', label: t.status.approved },
+    { value: 'in_progress', label: t.status.inProgress },
+    { value: 'built', label: t.status.built },
+    { value: 'pending', label: t.status.pending },
+  ];
 
   useEffect(() => {
     async function fetchIdeas() {
@@ -48,7 +50,7 @@ export default function MyIdeasPage() {
   }, [statusFilter]);
 
   const handleDelete = async (ideaId: string) => {
-    if (!confirm('Are you sure you want to delete this idea?')) return;
+    if (!confirm(t.common.delete + '?')) return;
 
     try {
       const res = await fetch(`/api/ideas/${ideaId}`, { method: 'DELETE' });
@@ -71,15 +73,15 @@ export default function MyIdeasPage() {
       >
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)]">
-            My Ideas
+            {t.nav.myIdeas}
           </h1>
           <p className="text-[var(--text-secondary)]">
-            Manage and track your submitted ideas
+            {t.dashboard.totalIdeas}
           </p>
         </div>
         <Link href="/submit">
           <Button leftIcon={<Plus className="w-4 h-4" />}>
-            New Idea
+            {t.nav.submitIdea}
           </Button>
         </Link>
       </motion.div>
@@ -119,7 +121,7 @@ export default function MyIdeasPage() {
       >
         {isLoading ? (
           <Card className="p-8 text-center">
-            <p className="text-[var(--text-secondary)]">Loading...</p>
+            <p className="text-[var(--text-secondary)]">{t.common.loading}</p>
           </Card>
         ) : ideas.length > 0 ? (
           <div className="space-y-4">
@@ -130,7 +132,7 @@ export default function MyIdeasPage() {
                 <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                   <Link href={`/ideas/${idea.id}/edit`}>
                     <Button variant="outline" size="sm">
-                      Edit
+                      {t.common.edit}
                     </Button>
                   </Link>
                   <Button
@@ -138,7 +140,7 @@ export default function MyIdeasPage() {
                     size="sm"
                     onClick={() => handleDelete(idea.id)}
                   >
-                    Delete
+                    {t.common.delete}
                   </Button>
                 </div>
               </div>
@@ -148,16 +150,16 @@ export default function MyIdeasPage() {
           <Card className="p-8 text-center">
             <Lightbulb className="w-12 h-12 mx-auto text-[var(--text-secondary)] mb-4" />
             <h3 className="text-lg font-medium text-[var(--text-primary)] mb-2">
-              {statusFilter === 'all' ? 'No ideas yet' : `No ${statusFilter} ideas`}
+              {t.ideas.noResults}
             </h3>
             <p className="text-[var(--text-secondary)] mb-4">
               {statusFilter === 'all'
-                ? 'Share your first idea with the community!'
-                : 'Try a different filter to see more ideas.'}
+                ? t.ideas.beFirst
+                : t.ideas.noResultsDesc}
             </p>
             {statusFilter === 'all' && (
               <Link href="/submit">
-                <Button>Submit Your First Idea</Button>
+                <Button>{t.landing.ctaSubmit}</Button>
               </Link>
             )}
           </Card>
