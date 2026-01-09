@@ -1,0 +1,509 @@
+export const translations = {
+  en: {
+    // Common
+    common: {
+      loading: 'Loading...',
+      error: 'Something went wrong',
+      retry: 'Try Again',
+      save: 'Save',
+      cancel: 'Cancel',
+      delete: 'Delete',
+      edit: 'Edit',
+      submit: 'Submit',
+      search: 'Search',
+      filter: 'Filter',
+      sortBy: 'Sort by',
+      all: 'All',
+      back: 'Back',
+      next: 'Next',
+      previous: 'Previous',
+    },
+
+    // Navigation
+    nav: {
+      home: 'Home',
+      browseIdeas: 'Browse Ideas',
+      submitIdea: 'Submit Idea',
+      dashboard: 'Dashboard',
+      myIdeas: 'My Ideas',
+      saved: 'Saved',
+      settings: 'Settings',
+      login: 'Login',
+      logout: 'Logout',
+      admin: 'Admin',
+      moderate: 'Moderate',
+      analytics: 'Analytics',
+      users: 'Users',
+    },
+
+    // Landing Page
+    landing: {
+      heroTitle: 'Share Ideas, Build Together',
+      heroSubtitle: 'Submit your ideas, vote on the best ones, and help shape the future of products.',
+      ctaBrowse: 'Browse Ideas',
+      ctaSubmit: 'Submit Your Idea',
+      howItWorks: 'How It Works',
+      step1Title: 'Submit Your Idea',
+      step1Desc: 'Share your product idea or problem you want solved',
+      step2Title: 'Community Votes',
+      step2Desc: 'The community votes and comments on ideas',
+      step3Title: 'Ideas Get Built',
+      step3Desc: 'Popular ideas get picked up and turned into reality',
+      trendingIdeas: 'Trending Ideas',
+      viewAll: 'View All',
+      categories: 'Categories',
+      exploreCategory: 'Explore',
+    },
+
+    // Ideas
+    ideas: {
+      title: 'Browse Ideas',
+      subtitle: 'Discover and vote on the best ideas from the community',
+      searchPlaceholder: 'Search ideas...',
+      noResults: 'No ideas found',
+      noResultsDesc: 'Try adjusting your search or filters',
+      beFirst: 'Be the first to submit an idea!',
+      votes: 'votes',
+      comments: 'comments',
+      postedBy: 'Posted by',
+      featured: 'Featured',
+      newest: 'Newest',
+      popular: 'Popular',
+      trending: 'Trending',
+    },
+
+    // Idea Detail
+    ideaDetail: {
+      backToIdeas: 'Back to Ideas',
+      share: 'Share',
+      report: 'Report',
+      commentsTitle: 'Comments',
+      noComments: 'No comments yet. Be the first to share your thoughts!',
+      addComment: 'Share your thoughts...',
+      postComment: 'Post Comment',
+      signInToComment: 'Sign in to leave a comment',
+      reply: 'Reply',
+    },
+
+    // Submit Idea
+    submitIdea: {
+      title: 'Submit Your Idea',
+      subtitle: 'Share your problem or solution with the community. Good ideas get voted up!',
+      titleLabel: 'Title',
+      titlePlaceholder: 'E.g., Tool to convert PDF to editable documents',
+      titleHelper: 'A clear, concise title that describes your idea',
+      categoryLabel: 'Category',
+      categoryPlaceholder: 'Select a category...',
+      descriptionLabel: 'Description',
+      descriptionPlaceholder: 'Describe your idea in detail...',
+      descriptionHelper: 'Supports Markdown formatting. Be specific about the problem and solution.',
+      tagsLabel: 'Tags (optional)',
+      tagsPlaceholder: 'Add a tag...',
+      tagsHelper: 'Add up to 5 tags to help others find your idea',
+      preview: 'Preview',
+      backToEdit: 'Back to Edit',
+      submitButton: 'Submit Idea',
+    },
+
+    // Dashboard
+    dashboard: {
+      title: 'Dashboard',
+      welcome: 'Welcome back',
+      totalIdeas: 'Total Ideas',
+      totalVotes: 'Total Votes',
+      totalComments: 'Total Comments',
+      savedIdeas: 'Saved Ideas',
+      recentIdeas: 'Recent Ideas',
+      quickActions: 'Quick Actions',
+    },
+
+    // Auth
+    auth: {
+      welcomeBack: 'Welcome back',
+      signInSubtitle: 'Sign in to share and vote on ideas',
+      continueWithGoogle: 'Continue with Google',
+      termsAgree: 'By signing in, you agree to our',
+      termsOfService: 'Terms of Service',
+      and: 'and',
+      privacyPolicy: 'Privacy Policy',
+      backToHome: 'Back to Home',
+    },
+
+    // Settings
+    settings: {
+      title: 'Settings',
+      subtitle: 'Manage your account settings',
+      profile: 'Profile',
+      displayName: 'Display Name',
+      editProfile: 'Edit Profile',
+      saveChanges: 'Save Changes',
+      email: 'Email',
+      emailManaged: 'Email is managed through your Google account',
+      account: 'Account',
+      accountType: 'Account Type',
+    },
+
+    // Status
+    status: {
+      pending: 'Pending',
+      approved: 'Approved',
+      rejected: 'Rejected',
+      inProgress: 'In Progress',
+      built: 'Built',
+    },
+
+    // Footer
+    footer: {
+      tagline: 'Share ideas, build together.',
+      product: 'Product',
+      company: 'Company',
+      legal: 'Legal',
+      about: 'About',
+      contact: 'Contact',
+      terms: 'Terms of Service',
+      privacy: 'Privacy Policy',
+      allRights: 'All rights reserved.',
+    },
+
+    // Errors
+    errors: {
+      notFound: 'Page Not Found',
+      notFoundDesc: "The page you're looking for doesn't exist.",
+      goHome: 'Go Home',
+      accessDenied: 'Access Denied',
+      serverError: 'Server Error',
+    },
+  },
+
+  vi: {
+    // Common
+    common: {
+      loading: 'Đang tải...',
+      error: 'Đã xảy ra lỗi',
+      retry: 'Thử lại',
+      save: 'Lưu',
+      cancel: 'Hủy',
+      delete: 'Xóa',
+      edit: 'Sửa',
+      submit: 'Gửi',
+      search: 'Tìm kiếm',
+      filter: 'Lọc',
+      sortBy: 'Sắp xếp theo',
+      all: 'Tất cả',
+      back: 'Quay lại',
+      next: 'Tiếp',
+      previous: 'Trước',
+    },
+
+    // Navigation
+    nav: {
+      home: 'Trang chủ',
+      browseIdeas: 'Khám phá',
+      submitIdea: 'Đăng ý tưởng',
+      dashboard: 'Bảng điều khiển',
+      myIdeas: 'Ý tưởng của tôi',
+      saved: 'Đã lưu',
+      settings: 'Cài đặt',
+      login: 'Đăng nhập',
+      logout: 'Đăng xuất',
+      admin: 'Quản trị',
+      moderate: 'Kiểm duyệt',
+      analytics: 'Thống kê',
+      users: 'Người dùng',
+    },
+
+    // Landing Page
+    landing: {
+      heroTitle: 'Chia sẻ ý tưởng, Cùng xây dựng',
+      heroSubtitle: 'Đăng ý tưởng của bạn, bình chọn cho những ý tưởng hay nhất và góp phần định hình tương lai sản phẩm.',
+      ctaBrowse: 'Khám phá ý tưởng',
+      ctaSubmit: 'Đăng ý tưởng',
+      howItWorks: 'Cách hoạt động',
+      step1Title: 'Đăng ý tưởng',
+      step1Desc: 'Chia sẻ ý tưởng sản phẩm hoặc vấn đề bạn muốn giải quyết',
+      step2Title: 'Cộng đồng bình chọn',
+      step2Desc: 'Cộng đồng bình chọn và bình luận về các ý tưởng',
+      step3Title: 'Ý tưởng thành hiện thực',
+      step3Desc: 'Những ý tưởng phổ biến được chọn và biến thành hiện thực',
+      trendingIdeas: 'Ý tưởng nổi bật',
+      viewAll: 'Xem tất cả',
+      categories: 'Danh mục',
+      exploreCategory: 'Khám phá',
+    },
+
+    // Ideas
+    ideas: {
+      title: 'Khám phá ý tưởng',
+      subtitle: 'Khám phá và bình chọn cho những ý tưởng hay nhất từ cộng đồng',
+      searchPlaceholder: 'Tìm kiếm ý tưởng...',
+      noResults: 'Không tìm thấy ý tưởng',
+      noResultsDesc: 'Thử điều chỉnh từ khóa hoặc bộ lọc',
+      beFirst: 'Hãy là người đầu tiên đăng ý tưởng!',
+      votes: 'lượt vote',
+      comments: 'bình luận',
+      postedBy: 'Đăng bởi',
+      featured: 'Nổi bật',
+      newest: 'Mới nhất',
+      popular: 'Phổ biến',
+      trending: 'Xu hướng',
+    },
+
+    // Idea Detail
+    ideaDetail: {
+      backToIdeas: 'Quay lại',
+      share: 'Chia sẻ',
+      report: 'Báo cáo',
+      commentsTitle: 'Bình luận',
+      noComments: 'Chưa có bình luận. Hãy là người đầu tiên chia sẻ suy nghĩ!',
+      addComment: 'Chia sẻ suy nghĩ của bạn...',
+      postComment: 'Đăng bình luận',
+      signInToComment: 'Đăng nhập để bình luận',
+      reply: 'Trả lời',
+    },
+
+    // Submit Idea
+    submitIdea: {
+      title: 'Đăng ý tưởng của bạn',
+      subtitle: 'Chia sẻ vấn đề hoặc giải pháp với cộng đồng. Ý tưởng hay sẽ được vote lên!',
+      titleLabel: 'Tiêu đề',
+      titlePlaceholder: 'VD: Công cụ chuyển đổi PDF sang tài liệu có thể chỉnh sửa',
+      titleHelper: 'Tiêu đề ngắn gọn, rõ ràng mô tả ý tưởng của bạn',
+      categoryLabel: 'Danh mục',
+      categoryPlaceholder: 'Chọn danh mục...',
+      descriptionLabel: 'Mô tả',
+      descriptionPlaceholder: 'Mô tả chi tiết ý tưởng của bạn...',
+      descriptionHelper: 'Hỗ trợ Markdown. Hãy cụ thể về vấn đề và giải pháp.',
+      tagsLabel: 'Thẻ (tùy chọn)',
+      tagsPlaceholder: 'Thêm thẻ...',
+      tagsHelper: 'Thêm tối đa 5 thẻ để người khác dễ tìm ý tưởng của bạn',
+      preview: 'Xem trước',
+      backToEdit: 'Quay lại chỉnh sửa',
+      submitButton: 'Đăng ý tưởng',
+    },
+
+    // Dashboard
+    dashboard: {
+      title: 'Bảng điều khiển',
+      welcome: 'Chào mừng trở lại',
+      totalIdeas: 'Tổng ý tưởng',
+      totalVotes: 'Tổng lượt vote',
+      totalComments: 'Tổng bình luận',
+      savedIdeas: 'Đã lưu',
+      recentIdeas: 'Ý tưởng gần đây',
+      quickActions: 'Thao tác nhanh',
+    },
+
+    // Auth
+    auth: {
+      welcomeBack: 'Chào mừng trở lại',
+      signInSubtitle: 'Đăng nhập để chia sẻ và bình chọn ý tưởng',
+      continueWithGoogle: 'Tiếp tục với Google',
+      termsAgree: 'Bằng việc đăng nhập, bạn đồng ý với',
+      termsOfService: 'Điều khoản dịch vụ',
+      and: 'và',
+      privacyPolicy: 'Chính sách bảo mật',
+      backToHome: 'Về trang chủ',
+    },
+
+    // Settings
+    settings: {
+      title: 'Cài đặt',
+      subtitle: 'Quản lý cài đặt tài khoản của bạn',
+      profile: 'Hồ sơ',
+      displayName: 'Tên hiển thị',
+      editProfile: 'Chỉnh sửa hồ sơ',
+      saveChanges: 'Lưu thay đổi',
+      email: 'Email',
+      emailManaged: 'Email được quản lý qua tài khoản Google',
+      account: 'Tài khoản',
+      accountType: 'Loại tài khoản',
+    },
+
+    // Status
+    status: {
+      pending: 'Chờ duyệt',
+      approved: 'Đã duyệt',
+      rejected: 'Từ chối',
+      inProgress: 'Đang phát triển',
+      built: 'Đã hoàn thành',
+    },
+
+    // Footer
+    footer: {
+      tagline: 'Chia sẻ ý tưởng, cùng xây dựng.',
+      product: 'Sản phẩm',
+      company: 'Công ty',
+      legal: 'Pháp lý',
+      about: 'Giới thiệu',
+      contact: 'Liên hệ',
+      terms: 'Điều khoản dịch vụ',
+      privacy: 'Chính sách bảo mật',
+      allRights: 'Đã đăng ký bản quyền.',
+    },
+
+    // Errors
+    errors: {
+      notFound: 'Không tìm thấy trang',
+      notFoundDesc: 'Trang bạn đang tìm không tồn tại.',
+      goHome: 'Về trang chủ',
+      accessDenied: 'Truy cập bị từ chối',
+      serverError: 'Lỗi máy chủ',
+    },
+  },
+};
+
+export type Language = keyof typeof translations;
+
+// Create a flexible type structure for translations
+export interface TranslationKeys {
+  common: {
+    loading: string;
+    error: string;
+    retry: string;
+    save: string;
+    cancel: string;
+    delete: string;
+    edit: string;
+    submit: string;
+    search: string;
+    filter: string;
+    sortBy: string;
+    all: string;
+    back: string;
+    next: string;
+    previous: string;
+  };
+  nav: {
+    home: string;
+    browseIdeas: string;
+    submitIdea: string;
+    dashboard: string;
+    myIdeas: string;
+    saved: string;
+    settings: string;
+    login: string;
+    logout: string;
+    admin: string;
+    moderate: string;
+    analytics: string;
+    users: string;
+  };
+  landing: {
+    heroTitle: string;
+    heroSubtitle: string;
+    ctaBrowse: string;
+    ctaSubmit: string;
+    howItWorks: string;
+    step1Title: string;
+    step1Desc: string;
+    step2Title: string;
+    step2Desc: string;
+    step3Title: string;
+    step3Desc: string;
+    trendingIdeas: string;
+    viewAll: string;
+    categories: string;
+    exploreCategory: string;
+  };
+  ideas: {
+    title: string;
+    subtitle: string;
+    searchPlaceholder: string;
+    noResults: string;
+    noResultsDesc: string;
+    beFirst: string;
+    votes: string;
+    comments: string;
+    postedBy: string;
+    featured: string;
+    newest: string;
+    popular: string;
+    trending: string;
+  };
+  ideaDetail: {
+    backToIdeas: string;
+    share: string;
+    report: string;
+    commentsTitle: string;
+    noComments: string;
+    addComment: string;
+    postComment: string;
+    signInToComment: string;
+    reply: string;
+  };
+  submitIdea: {
+    title: string;
+    subtitle: string;
+    titleLabel: string;
+    titlePlaceholder: string;
+    titleHelper: string;
+    categoryLabel: string;
+    categoryPlaceholder: string;
+    descriptionLabel: string;
+    descriptionPlaceholder: string;
+    descriptionHelper: string;
+    tagsLabel: string;
+    tagsPlaceholder: string;
+    tagsHelper: string;
+    preview: string;
+    backToEdit: string;
+    submitButton: string;
+  };
+  dashboard: {
+    title: string;
+    welcome: string;
+    totalIdeas: string;
+    totalVotes: string;
+    totalComments: string;
+    savedIdeas: string;
+    recentIdeas: string;
+    quickActions: string;
+  };
+  auth: {
+    welcomeBack: string;
+    signInSubtitle: string;
+    continueWithGoogle: string;
+    termsAgree: string;
+    termsOfService: string;
+    and: string;
+    privacyPolicy: string;
+    backToHome: string;
+  };
+  settings: {
+    title: string;
+    subtitle: string;
+    profile: string;
+    displayName: string;
+    editProfile: string;
+    saveChanges: string;
+    email: string;
+    emailManaged: string;
+    account: string;
+    accountType: string;
+  };
+  status: {
+    pending: string;
+    approved: string;
+    rejected: string;
+    inProgress: string;
+    built: string;
+  };
+  footer: {
+    tagline: string;
+    product: string;
+    company: string;
+    legal: string;
+    about: string;
+    contact: string;
+    terms: string;
+    privacy: string;
+    allRights: string;
+  };
+  errors: {
+    notFound: string;
+    notFoundDesc: string;
+    goHome: string;
+    accessDenied: string;
+    serverError: string;
+  };
+}

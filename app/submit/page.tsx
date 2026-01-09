@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Button, Card, Input, Textarea, Select, Badge } from '@/components/ui';
+import { useLanguage } from '@/lib/i18n';
 
 interface Category {
   id: string;
@@ -17,6 +18,7 @@ interface Category {
 
 export default function SubmitIdeaPage() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [categories, setCategories] = useState<{ value: string; label: string; icon: string }[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
@@ -137,7 +139,7 @@ export default function SubmitIdeaPage() {
             className="inline-flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to Ideas
+            {t.ideaDetail.backToIdeas}
           </Link>
         </motion.div>
 
@@ -152,11 +154,11 @@ export default function SubmitIdeaPage() {
               <Lightbulb className="w-6 h-6 text-[var(--primary)]" />
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)]">
-              Submit Your Idea
+              {t.submitIdea.title}
             </h1>
           </div>
           <p className="text-[var(--text-secondary)]">
-            Share your problem or solution with the community. Good ideas get voted up!
+            {t.submitIdea.subtitle}
           </p>
         </motion.div>
 
@@ -167,7 +169,7 @@ export default function SubmitIdeaPage() {
             size="sm"
             onClick={() => setShowPreview(false)}
           >
-            Edit
+            {t.common.edit}
           </Button>
           <Button
             variant={showPreview ? 'primary' : 'ghost'}
@@ -175,7 +177,7 @@ export default function SubmitIdeaPage() {
             onClick={() => setShowPreview(true)}
             leftIcon={<Eye className="w-4 h-4" />}
           >
-            Preview
+            {t.submitIdea.preview}
           </Button>
         </div>
 
@@ -190,18 +192,18 @@ export default function SubmitIdeaPage() {
               <div className="space-y-6">
                 {/* Title */}
                 <Input
-                  label="Title *"
-                  placeholder="E.g., Tool to convert PDF to editable documents"
+                  label={`${t.submitIdea.titleLabel} *`}
+                  placeholder={t.submitIdea.titlePlaceholder}
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   error={errors.title}
-                  helperText="A clear, concise title that describes your idea"
+                  helperText={t.submitIdea.titleHelper}
                 />
 
                 {/* Category */}
                 <Select
-                  label="Category *"
-                  placeholder="Select a category..."
+                  label={`${t.submitIdea.categoryLabel} *`}
+                  placeholder={t.submitIdea.categoryPlaceholder}
                   value={formData.categoryId}
                   onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
                   options={categories}
@@ -210,32 +212,23 @@ export default function SubmitIdeaPage() {
 
                 {/* Description */}
                 <Textarea
-                  label="Description *"
-                  placeholder="Describe your idea or problem in detail...
-
-## Problem
-What problem are you trying to solve?
-
-## Solution
-How do you envision the solution?
-
-## Target Users
-Who would benefit from this?"
+                  label={`${t.submitIdea.descriptionLabel} *`}
+                  placeholder={t.submitIdea.descriptionPlaceholder}
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   error={errors.description}
-                  helperText="Supports Markdown formatting. Be specific about the problem and solution."
+                  helperText={t.submitIdea.descriptionHelper}
                   className="min-h-[200px]"
                 />
 
                 {/* Tags */}
                 <div>
                   <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">
-                    Tags (optional)
+                    {t.submitIdea.tagsLabel}
                   </label>
                   <div className="flex gap-2 mb-2">
                     <Input
-                      placeholder="Add a tag..."
+                      placeholder={t.submitIdea.tagsPlaceholder}
                       value={tagInput}
                       onChange={(e) => setTagInput(e.target.value)}
                       onKeyDown={handleKeyDown}
@@ -262,7 +255,7 @@ Who would benefit from this?"
                     ))}
                   </div>
                   <p className="mt-1.5 text-sm text-[var(--text-secondary)]">
-                    Add up to 5 tags to help others find your idea
+                    {t.submitIdea.tagsHelper}
                   </p>
                 </div>
 
@@ -280,14 +273,14 @@ Who would benefit from this?"
                     onClick={() => setShowPreview(true)}
                     leftIcon={<Eye className="w-4 h-4" />}
                   >
-                    Preview
+                    {t.submitIdea.preview}
                   </Button>
                   <Button
                     onClick={handleSubmit}
                     isLoading={isSubmitting}
                     leftIcon={<Send className="w-4 h-4" />}
                   >
-                    Submit Idea
+                    {t.submitIdea.submitButton}
                   </Button>
                 </div>
               </div>
@@ -362,14 +355,14 @@ Who would benefit from this?"
                   variant="outline"
                   onClick={() => setShowPreview(false)}
                 >
-                  Back to Edit
+                  {t.submitIdea.backToEdit}
                 </Button>
                 <Button
                   onClick={handleSubmit}
                   isLoading={isSubmitting}
                   leftIcon={<Send className="w-4 h-4" />}
                 >
-                  Submit Idea
+                  {t.submitIdea.submitButton}
                 </Button>
               </div>
             </Card>

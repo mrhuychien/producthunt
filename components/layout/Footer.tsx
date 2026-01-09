@@ -2,25 +2,28 @@
 
 import Link from 'next/link';
 import { Lightbulb, Github, Twitter } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n';
 
-const footerLinks = {
-  product: [
-    { href: '/ideas', label: 'Browse Ideas' },
-    { href: '/submit', label: 'Submit Idea' },
-    { href: '/categories', label: 'Categories' },
-  ],
-  company: [
-    { href: '/about', label: 'About' },
-    { href: '/contact', label: 'Contact' },
-    { href: '/privacy', label: 'Privacy' },
-  ],
-  social: [
-    { href: 'https://github.com', label: 'GitHub', icon: Github },
-    { href: 'https://twitter.com', label: 'Twitter', icon: Twitter },
-  ],
-};
+const socialLinks = [
+  { href: 'https://github.com', label: 'GitHub', icon: Github },
+  { href: 'https://twitter.com', label: 'Twitter', icon: Twitter },
+];
 
 export function Footer() {
+  const { t } = useLanguage();
+
+  const productLinks = [
+    { href: '/ideas', label: t.nav.browseIdeas },
+    { href: '/submit', label: t.nav.submitIdea },
+  ];
+
+  const companyLinks = [
+    { href: '/about', label: t.footer.about },
+    { href: '/contact', label: t.footer.contact },
+    { href: '/terms', label: t.footer.terms },
+    { href: '/privacy', label: t.footer.privacy },
+  ];
+
   return (
     <footer className="bg-[var(--surface)] border-t border-[var(--border)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -36,10 +39,10 @@ export function Footer() {
               </span>
             </Link>
             <p className="mt-4 text-[var(--text-secondary)] max-w-xs">
-              Share your ideas, solve problems together, and build amazing products with the community.
+              {t.footer.tagline}
             </p>
             <div className="flex items-center gap-3 mt-4">
-              {footerLinks.social.map((link) => (
+              {socialLinks.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
@@ -56,10 +59,10 @@ export function Footer() {
           {/* Product Links */}
           <div>
             <h3 className="font-semibold text-[var(--text-primary)] mb-4">
-              Product
+              {t.footer.product}
             </h3>
             <ul className="space-y-2">
-              {footerLinks.product.map((link) => (
+              {productLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
@@ -75,10 +78,10 @@ export function Footer() {
           {/* Company Links */}
           <div>
             <h3 className="font-semibold text-[var(--text-primary)] mb-4">
-              Company
+              {t.footer.legal}
             </h3>
             <ul className="space-y-2">
-              {footerLinks.company.map((link) => (
+              {companyLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
@@ -95,7 +98,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-[var(--border)] flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-[var(--text-secondary)]">
-            &copy; {new Date().getFullYear()} IdeaVault. All rights reserved.
+            &copy; {new Date().getFullYear()} IdeaVault. {t.footer.allRights}
           </p>
           <p className="text-sm text-[var(--text-secondary)]">
             Built with Next.js & Supabase

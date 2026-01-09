@@ -12,12 +12,14 @@ import { IdeaListSkeleton } from '@/components/ui/Skeleton';
 import { ErrorMessage, EmptyState } from '@/components/ui/ErrorMessage';
 import { IdeaList } from '@/components/ideas';
 import { SearchBar, CategoryFilter } from '@/components/shared';
+import { useLanguage } from '@/lib/i18n';
 import type { Idea, Category } from '@/types';
 
 type SortOption = 'newest' | 'popular' | 'trending';
 
 export default function IdeasPage() {
   const { data: session } = useSession();
+  const { t } = useLanguage();
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -151,10 +153,10 @@ export default function IdeasPage() {
           className="mb-8"
         >
           <h1 className="text-3xl font-bold text-[var(--text-primary)]">
-            Browse Ideas
+            {t.ideas.title}
           </h1>
           <p className="mt-2 text-lg text-[var(--text-secondary)]">
-            Discover and vote on the best ideas from the community
+            {t.ideas.subtitle}
           </p>
         </motion.div>
 
@@ -167,7 +169,7 @@ export default function IdeasPage() {
         >
           {/* Search Bar */}
           <div className="max-w-xl">
-            <SearchBar onSearch={handleSearch} placeholder="Search ideas..." />
+            <SearchBar onSearch={handleSearch} placeholder={t.ideas.searchPlaceholder} />
           </div>
 
           {/* Category Filter */}
@@ -182,7 +184,7 @@ export default function IdeasPage() {
           {/* Sort Options */}
           <div className="flex items-center gap-2">
             <SlidersHorizontal className="w-4 h-4 text-[var(--text-secondary)]" />
-            <span className="text-sm text-[var(--text-secondary)]">Sort by:</span>
+            <span className="text-sm text-[var(--text-secondary)]">{t.common.sortBy}:</span>
             <div className="flex gap-2">
               {(['popular', 'newest', 'trending'] as SortOption[]).map((option) => (
                 <Button
@@ -191,7 +193,7 @@ export default function IdeasPage() {
                   size="sm"
                   onClick={() => setSortBy(option)}
                 >
-                  {option.charAt(0).toUpperCase() + option.slice(1)}
+                  {t.ideas[option]}
                 </Button>
               ))}
             </div>
@@ -220,19 +222,19 @@ export default function IdeasPage() {
               ideas={ideas}
               onVote={handleVote}
               onSave={handleSave}
-              emptyMessage="No ideas match your filters. Try adjusting your search or category."
+              emptyMessage={t.ideas.noResultsDesc}
             />
           ) : (
             <EmptyState
-              title="No ideas yet"
+              title={t.ideas.noResults}
               description={search || selectedCategory
-                ? "No ideas match your filters. Try adjusting your search or category."
-                : "Be the first to submit an idea!"
+                ? t.ideas.noResultsDesc
+                : t.ideas.beFirst
               }
               action={
                 !search && !selectedCategory ? (
                   <Link href="/submit">
-                    <Button>Submit an Idea</Button>
+                    <Button>{t.nav.submitIdea}</Button>
                   </Link>
                 ) : undefined
               }

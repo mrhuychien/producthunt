@@ -6,6 +6,8 @@ import { motion } from 'framer-motion';
 import { Lightbulb, Menu, X, Search } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui';
+import { LanguageSwitcher } from '@/components/shared/LanguageSwitcher';
+import { useLanguage } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 
 interface HeaderProps {
@@ -16,14 +18,15 @@ interface HeaderProps {
   } | null;
 }
 
-const navLinks = [
-  { href: '/ideas', label: 'Browse Ideas' },
-  { href: '/submit', label: 'Submit Idea' },
-];
-
 export function Header({ user }: HeaderProps) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { t } = useLanguage();
+
+  const navLinks = [
+    { href: '/ideas', label: t.nav.browseIdeas },
+    { href: '/submit', label: t.nav.submitIdea },
+  ];
 
   return (
     <header className="sticky top-0 z-40 bg-[var(--surface)]/80 backdrop-blur-md border-b border-[var(--border)]">
@@ -61,7 +64,10 @@ export function Header({ user }: HeaderProps) {
           </div>
 
           {/* Right Side */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            {/* Language Switcher */}
+            <LanguageSwitcher />
+
             {/* Search Button */}
             <Button variant="ghost" size="sm" className="hidden sm:flex" aria-label="Search">
               <Search className="w-4 h-4" />
@@ -82,7 +88,7 @@ export function Header({ user }: HeaderProps) {
             ) : (
               <Link href="/login">
                 <Button size="sm">
-                  Login with Google
+                  {t.nav.login}
                 </Button>
               </Link>
             )}

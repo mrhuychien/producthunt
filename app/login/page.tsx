@@ -5,14 +5,23 @@ import { motion } from 'framer-motion';
 import { Lightbulb } from 'lucide-react';
 import Link from 'next/link';
 import { Button, Card } from '@/components/ui';
+import { useLanguage } from '@/lib/i18n';
+import { LanguageSwitcher } from '@/components/shared/LanguageSwitcher';
 
 export default function LoginPage() {
+  const { t } = useLanguage();
+
   const handleGoogleLogin = () => {
     signIn('google', { callbackUrl: '/dashboard' });
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-4">
+      {/* Language Switcher - Top Right */}
+      <div className="absolute top-4 right-4">
+        <LanguageSwitcher />
+      </div>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -33,10 +42,10 @@ export default function LoginPage() {
           {/* Heading */}
           <div className="text-center mb-8">
             <h1 className="text-2xl font-bold text-[var(--text-primary)]">
-              Welcome back
+              {t.auth.welcomeBack}
             </h1>
             <p className="mt-2 text-[var(--text-secondary)]">
-              Sign in to share and vote on ideas
+              {t.auth.signInSubtitle}
             </p>
           </div>
 
@@ -67,18 +76,18 @@ export default function LoginPage() {
               </svg>
             }
           >
-            Continue with Google
+            {t.auth.continueWithGoogle}
           </Button>
 
           {/* Terms */}
           <p className="mt-6 text-center text-sm text-[var(--text-secondary)]">
-            By signing in, you agree to our{' '}
+            {t.auth.termsAgree}{' '}
             <Link href="/terms" className="text-[var(--primary)] hover:underline">
-              Terms of Service
+              {t.auth.termsOfService}
             </Link>{' '}
-            and{' '}
+            {t.auth.and}{' '}
             <Link href="/privacy" className="text-[var(--primary)] hover:underline">
-              Privacy Policy
+              {t.auth.privacyPolicy}
             </Link>
           </p>
         </Card>
@@ -89,7 +98,7 @@ export default function LoginPage() {
             href="/"
             className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
           >
-            ← Back to Home
+            ← {t.auth.backToHome}
           </Link>
         </div>
       </motion.div>
