@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
@@ -19,34 +20,7 @@ import { Footer } from '@/components/layout/Footer';
 import { Button, Card, Badge } from '@/components/ui';
 import { VoteButton } from '@/components/ideas/VoteButton';
 import { useLanguage } from '@/lib/i18n';
-
-// Mock data for trending ideas
-const trendingIdeas = [
-  {
-    id: '1',
-    title: 'AI-Powered Code Review Tool',
-    description: 'An intelligent tool that automatically reviews code and suggests improvements using machine learning.',
-    voteCount: 234,
-    category: { name: 'Tools', icon: '🛠' },
-    commentCount: 45,
-  },
-  {
-    id: '2',
-    title: 'Collaborative Whiteboard for Remote Teams',
-    description: 'Real-time whiteboard with video chat integration for brainstorming sessions.',
-    voteCount: 189,
-    category: { name: 'Apps', icon: '📱' },
-    commentCount: 32,
-  },
-  {
-    id: '3',
-    title: 'Gamified Learning Platform for Kids',
-    description: 'Educational games that make learning math and science fun for children aged 6-12.',
-    voteCount: 156,
-    category: { name: 'Education', icon: '📚' },
-    commentCount: 28,
-  },
-];
+import type { Idea } from '@/types';
 
 // Categories
 const categories = [
@@ -75,6 +49,26 @@ const stagger = {
 
 export default function Home() {
   const { t } = useLanguage();
+  const [trendingIdeas, setTrendingIdeas] = useState<Idea[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetch trending ideas from API
+  useEffect(() => {
+    const fetchTrendingIdeas = async () => {
+      try {
+        const res = await fetch('/api/ideas?sortBy=popular&limit=3');
+        if (res.ok) {
+          const data = await res.json();
+          setTrendingIdeas(data.data || []);
+        }
+      } catch (err) {
+        // Silent fail - will show empty state
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchTrendingIdeas();
+  }, []);
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -221,33 +215,63 @@ export default function Home() {
               viewport={{ once: true }}
               className="grid md:grid-cols-3 gap-6"
             >
-              {trendingIdeas.map((idea) => (
-                <motion.div key={idea.id} variants={fadeInUp}>
-                  <Card hover className="p-6 h-full">
-                    <div className="flex gap-4">
-                      <VoteButton
-                        voteCount={idea.voteCount}
-                        onVote={() => {}}
-                        size="sm"
-                      />
-                      <div className="flex-1">
-                        <Badge variant="primary" size="sm" className="mb-2">
-                          {idea.category.icon} {idea.category.name}
-                        </Badge>
-                        <h3 className="font-semibold text-[var(--text-primary)] line-clamp-2 mb-2">
-                          {idea.title}
-                        </h3>
-                        <p className="text-sm text-[var(--text-secondary)] line-clamp-2">
-                          {idea.description}
-                        </p>
-                        <div className="mt-4 text-sm text-[var(--text-secondary)]">
-                          💬 {idea.commentCount} {t.ideas.comments}
+              {isLoading ? (
+                // Loading skeleton
+                [1, 2, 3].map((i) => (
+                  <motion.div key={i} variants={fadeInUp}>
+                    <Card className="p-6 h-full animate-pulse">
+                      <div className="flex gap-4">
+                        <div className="w-12 h-16 bg-gray-200 rounded-lg" />
+                        <div className="flex-1 space-y-3">
+                          <div className="h-4 bg-gray-200 rounded w-20" />
+                          <div className="h-5 bg-gray-200 rounded w-full" />
+                          <div className="h-4 bg-gray-200 rounded w-3/4" />
                         </div>
                       </div>
-                    </div>
-                  </Card>
-                </motion.div>
-              ))}
+                    </Card>
+                  </motion.div>
+                ))
+              ) : trendingIdeas.length > 0 ? (
+                trendingIdeas.map((idea) => (
+                  <motion.div key={idea.id} variants={fadeInUp}>
+                    <Link href={`/ideas/${idea.id}`}>
+                      <Card hover className="p-6 h-full">
+                        <div className="flex gap-4">
+                          <VoteButton
+                            voteCount={idea.voteCount}
+                            onVote={() => {}}
+                            size="sm"
+                          />
+                          <div className="flex-1">
+                            <Badge variant="primary" size="sm" className="mb-2">
+                              {idea.category?.icon} {idea.category?.name}
+                            </Badge>
+                            <h3 className="font-semibold text-[var(--text-primary)] line-clamp-2 mb-2">
+                              {idea.title}
+                            </h3>
+                            <p className="text-sm text-[var(--text-secondary)] line-clamp-2">
+                              {idea.description}
+                            </p>
+                            <div className="mt-4 text-sm text-[var(--text-secondary)]">
+                              💬 {idea.commentCount || 0} {t.ideas.comments}
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
+                    </Link>
+                  </motion.div>
+                ))
+              ) : (
+                // Empty state
+                <div className="col-span-3 text-center py-12">
+                  <p className="text-[var(--text-secondary)] mb-4">
+                    {t.ideas.beFirst}
+                  </p>
+                  <Link href="/submit">
+                    <Button>{t.landing.ctaSubmit}</Button>
+                  </Link>
+                </div>
+              )}
             </motion.div>
           </div>
         </section>
