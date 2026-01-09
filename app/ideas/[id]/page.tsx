@@ -22,11 +22,13 @@ import { ErrorMessage } from '@/components/ui/ErrorMessage';
 import { VoteButton } from '@/components/ideas/VoteButton';
 import { UserAvatar } from '@/components/shared/UserAvatar';
 import { formatRelativeTime, getStatusColor, getStatusLabel } from '@/lib/utils';
+import { useLanguage } from '@/lib/i18n';
 import type { Idea, Comment } from '@/types';
 
 export default function IdeaDetailPage() {
   const params = useParams();
   const { data: session } = useSession();
+  const { t } = useLanguage();
   const [idea, setIdea] = useState<Idea | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -202,12 +204,12 @@ export default function IdeaDetailPage() {
         <Header />
         <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <ErrorMessage
-            message="Idea not found"
+            message={t.errors.notFoundDesc}
             title="404"
           />
           <div className="mt-4 text-center">
             <Link href="/ideas">
-              <Button variant="primary">Browse Ideas</Button>
+              <Button variant="primary">{t.landing.ctaBrowse}</Button>
             </Link>
           </div>
         </main>
@@ -222,7 +224,7 @@ export default function IdeaDetailPage() {
         <Header />
         <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <ErrorMessage
-            message={error || 'Something went wrong'}
+            message={error || t.common.error}
             onRetry={() => window.location.reload()}
           />
         </main>
@@ -247,7 +249,7 @@ export default function IdeaDetailPage() {
             className="inline-flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to Ideas
+            {t.ideaDetail.backToIdeas}
           </Link>
         </motion.div>
 
@@ -351,7 +353,7 @@ export default function IdeaDetailPage() {
                   onClick={handleSave}
                   leftIcon={idea.isSaved ? <BookmarkCheck className="w-4 h-4" /> : <Bookmark className="w-4 h-4" />}
                 >
-                  {idea.isSaved ? 'Saved' : 'Save'}
+                  {idea.isSaved ? t.nav.saved : t.common.save}
                 </Button>
                 <Button
                   variant="outline"
@@ -359,14 +361,14 @@ export default function IdeaDetailPage() {
                   onClick={handleShare}
                   leftIcon={<Share2 className="w-4 h-4" />}
                 >
-                  Share
+                  {t.ideaDetail.share}
                 </Button>
                 <Button
                   variant="ghost"
                   size="sm"
                   leftIcon={<Flag className="w-4 h-4" />}
                 >
-                  Report
+                  {t.ideaDetail.report}
                 </Button>
               </div>
             </div>
@@ -383,7 +385,7 @@ export default function IdeaDetailPage() {
           <Card className="p-6 sm:p-8">
             <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-6 flex items-center gap-2">
               <MessageCircle className="w-5 h-5" />
-              Comments ({comments.length})
+              {t.ideaDetail.commentsTitle} ({comments.length})
             </h2>
 
             {/* Comment Form */}
@@ -392,7 +394,7 @@ export default function IdeaDetailPage() {
                 <Textarea
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
-                  placeholder="Share your thoughts..."
+                  placeholder={t.ideaDetail.addComment}
                   className="mb-3"
                 />
                 <div className="flex justify-end">
@@ -402,17 +404,17 @@ export default function IdeaDetailPage() {
                     isLoading={isSubmittingComment}
                     leftIcon={<Send className="w-4 h-4" />}
                   >
-                    Post Comment
+                    {t.ideaDetail.postComment}
                   </Button>
                 </div>
               </div>
             ) : (
               <div className="mb-8 p-4 bg-[var(--surface)] rounded-lg text-center">
                 <p className="text-[var(--text-secondary)] mb-2">
-                  Sign in to leave a comment
+                  {t.ideaDetail.signInToComment}
                 </p>
                 <Link href="/login">
-                  <Button size="sm">Sign In</Button>
+                  <Button size="sm">{t.nav.login}</Button>
                 </Link>
               </div>
             )}
@@ -421,7 +423,7 @@ export default function IdeaDetailPage() {
             <div className="space-y-6">
               {comments.length === 0 ? (
                 <p className="text-center text-[var(--text-secondary)] py-4">
-                  No comments yet. Be the first to share your thoughts!
+                  {t.ideaDetail.noComments}
                 </p>
               ) : (
                 comments.map((comment) => (
@@ -450,7 +452,7 @@ export default function IdeaDetailPage() {
                       </p>
                       <div className="mt-2">
                         <Button variant="ghost" size="sm">
-                          Reply
+                          {t.ideaDetail.reply}
                         </Button>
                       </div>
                     </div>

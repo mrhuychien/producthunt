@@ -18,6 +18,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Button, Card, Badge } from '@/components/ui';
 import { VoteButton } from '@/components/ideas/VoteButton';
+import { useLanguage } from '@/lib/i18n';
 
 // Mock data for trending ideas
 const trendingIdeas = [
@@ -73,6 +74,8 @@ const stagger = {
 };
 
 export default function Home() {
+  const { t } = useLanguage();
+
   return (
     <div className="min-h-screen bg-[var(--background)]">
       <Header />
@@ -91,31 +94,26 @@ export default function Home() {
               className="text-center max-w-3xl mx-auto"
             >
               <Badge variant="primary" size="lg" className="mb-6">
-                Join 10,000+ idea makers
+                {t.landing.heroTitle}
               </Badge>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)] leading-tight">
-                Share ideas.
-                <br />
-                <span className="text-[var(--primary)]">Solve problems.</span>
-                <br />
-                Build together.
+                {t.landing.heroTitle}
               </h1>
 
               <p className="mt-6 text-lg sm:text-xl text-[var(--text-secondary)] max-w-2xl mx-auto">
-                IdeaVault is where great ideas come to life. Submit your ideas,
-                vote on the best ones, and help the community build amazing products.
+                {t.landing.heroSubtitle}
               </p>
 
               <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link href="/submit">
                   <Button size="lg" rightIcon={<Lightbulb className="w-5 h-5" />}>
-                    Submit Your Idea
+                    {t.landing.ctaSubmit}
                   </Button>
                 </Link>
                 <Link href="/ideas">
                   <Button size="lg" variant="outline" rightIcon={<ArrowRight className="w-5 h-5" />}>
-                    Browse Ideas
+                    {t.landing.ctaBrowse}
                   </Button>
                 </Link>
               </div>
@@ -133,11 +131,8 @@ export default function Home() {
               className="text-center mb-16"
             >
               <h2 className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)]">
-                How It Works
+                {t.landing.howItWorks}
               </h2>
-              <p className="mt-4 text-lg text-[var(--text-secondary)]">
-                From idea to reality in three simple steps
-              </p>
             </motion.div>
 
             <motion.div
@@ -153,13 +148,12 @@ export default function Home() {
                   <div className="w-16 h-16 mx-auto bg-indigo-100 rounded-2xl flex items-center justify-center mb-6">
                     <Lightbulb className="w-8 h-8 text-[var(--primary)]" />
                   </div>
-                  <div className="text-sm font-medium text-[var(--primary)] mb-2">Step 1</div>
+                  <div className="text-sm font-medium text-[var(--primary)] mb-2">1</div>
                   <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
-                    Submit Your Idea
+                    {t.landing.step1Title}
                   </h3>
                   <p className="text-[var(--text-secondary)]">
-                    Share your problem or solution. Describe what you want to build
-                    and why it matters.
+                    {t.landing.step1Desc}
                   </p>
                 </Card>
               </motion.div>
@@ -170,13 +164,12 @@ export default function Home() {
                   <div className="w-16 h-16 mx-auto bg-green-100 rounded-2xl flex items-center justify-center mb-6">
                     <ThumbsUp className="w-8 h-8 text-[var(--success)]" />
                   </div>
-                  <div className="text-sm font-medium text-[var(--success)] mb-2">Step 2</div>
+                  <div className="text-sm font-medium text-[var(--success)] mb-2">2</div>
                   <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
-                    Community Votes
+                    {t.landing.step2Title}
                   </h3>
                   <p className="text-[var(--text-secondary)]">
-                    The community votes on ideas they want to see built.
-                    Best ideas rise to the top.
+                    {t.landing.step2Desc}
                   </p>
                 </Card>
               </motion.div>
@@ -187,13 +180,12 @@ export default function Home() {
                   <div className="w-16 h-16 mx-auto bg-purple-100 rounded-2xl flex items-center justify-center mb-6">
                     <Rocket className="w-8 h-8 text-[var(--secondary)]" />
                   </div>
-                  <div className="text-sm font-medium text-[var(--secondary)] mb-2">Step 3</div>
+                  <div className="text-sm font-medium text-[var(--secondary)] mb-2">3</div>
                   <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
-                    Build Together
+                    {t.landing.step3Title}
                   </h3>
                   <p className="text-[var(--text-secondary)]">
-                    Developers pick up popular ideas and build them.
-                    Track progress and collaborate.
+                    {t.landing.step3Desc}
                   </p>
                 </Card>
               </motion.div>
@@ -212,15 +204,12 @@ export default function Home() {
             >
               <div>
                 <h2 className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)]">
-                  Trending Ideas
+                  {t.landing.trendingIdeas}
                 </h2>
-                <p className="mt-2 text-lg text-[var(--text-secondary)]">
-                  Most popular ideas this week
-                </p>
               </div>
               <Link href="/ideas">
                 <Button variant="outline" rightIcon={<ArrowRight className="w-4 h-4" />}>
-                  View All
+                  {t.landing.viewAll}
                 </Button>
               </Link>
             </motion.div>
@@ -232,7 +221,7 @@ export default function Home() {
               viewport={{ once: true }}
               className="grid md:grid-cols-3 gap-6"
             >
-              {trendingIdeas.map((idea, index) => (
+              {trendingIdeas.map((idea) => (
                 <motion.div key={idea.id} variants={fadeInUp}>
                   <Card hover className="p-6 h-full">
                     <div className="flex gap-4">
@@ -252,7 +241,7 @@ export default function Home() {
                           {idea.description}
                         </p>
                         <div className="mt-4 text-sm text-[var(--text-secondary)]">
-                          💬 {idea.commentCount} comments
+                          💬 {idea.commentCount} {t.ideas.comments}
                         </div>
                       </div>
                     </div>
@@ -273,11 +262,8 @@ export default function Home() {
               className="text-center mb-12"
             >
               <h2 className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)]">
-                Explore Categories
+                {t.landing.categories}
               </h2>
-              <p className="mt-4 text-lg text-[var(--text-secondary)]">
-                Find ideas in your area of interest
-              </p>
             </motion.div>
 
             <motion.div
@@ -315,11 +301,10 @@ export default function Home() {
               className="bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] rounded-2xl p-8 md:p-16 text-center text-white"
             >
               <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-                Ready to share your idea?
+                {t.landing.ctaSubmit}
               </h2>
               <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
-                Join thousands of makers who are building the future together.
-                Your next big idea could change everything.
+                {t.landing.heroSubtitle}
               </p>
               <Link href="/login">
                 <Button
@@ -327,7 +312,7 @@ export default function Home() {
                   variant="outline"
                   className="bg-white text-[var(--primary)] border-white hover:bg-white/90"
                 >
-                  Get Started - It&apos;s Free
+                  {t.nav.login}
                 </Button>
               </Link>
             </motion.div>

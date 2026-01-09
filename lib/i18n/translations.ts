@@ -173,6 +173,46 @@ export const translations = {
       accessDenied: 'Access Denied',
       serverError: 'Server Error',
     },
+
+    // Terms of Service
+    terms: {
+      title: 'Terms of Service',
+      lastUpdated: 'Last updated: January 2025',
+      section1Title: '1. Acceptance of Terms',
+      section1Content: 'By accessing and using IdeaVault, you agree to be bound by these Terms of Service.',
+      section2Title: '2. Use of Service',
+      section2Content: 'You may use IdeaVault to share ideas, vote on ideas, and engage with the community. You agree not to:',
+      section2List: ['Post spam or misleading content', 'Harass or abuse other users', 'Violate any applicable laws', 'Attempt to hack or disrupt the service'],
+      section3Title: '3. User Content',
+      section3Content: 'You retain ownership of ideas you submit. By posting, you grant IdeaVault a license to display your content on the platform.',
+      section4Title: '4. Account',
+      section4Content: 'You are responsible for maintaining the security of your account and all activities under it.',
+      section5Title: '5. Changes',
+      section5Content: 'We may update these terms at any time. Continued use of the service constitutes acceptance of updated terms.',
+      section6Title: '6. Contact',
+      section6Content: 'For questions about these terms, please contact us through the platform.',
+    },
+
+    // Privacy Policy
+    privacy: {
+      title: 'Privacy Policy',
+      lastUpdated: 'Last updated: January 2025',
+      section1Title: '1. Information We Collect',
+      section1Content: 'When you use IdeaVault, we collect:',
+      section1List: ['Account information (name, email) from Google OAuth', 'Ideas and comments you post', 'Votes and saved items'],
+      section2Title: '2. How We Use Your Information',
+      section2Content: 'We use your information to:',
+      section2List: ['Provide and improve our services', 'Display your ideas and profile to other users', 'Send important notifications about your account'],
+      section3Title: '3. Data Storage',
+      section3Content: 'Your data is securely stored using Supabase infrastructure with encryption at rest and in transit.',
+      section4Title: '4. Third-Party Services',
+      section4Content: 'We use:',
+      section4List: ['Google OAuth for authentication', 'Supabase for database', 'Vercel for hosting'],
+      section5Title: '5. Your Rights',
+      section5Content: 'You can request to delete your account and data at any time by contacting us.',
+      section6Title: '6. Contact',
+      section6Content: 'For privacy concerns, please contact us through the platform.',
+    },
   },
 
   vi: {
@@ -349,6 +389,46 @@ export const translations = {
       accessDenied: 'Truy cập bị từ chối',
       serverError: 'Lỗi máy chủ',
     },
+
+    // Terms of Service
+    terms: {
+      title: 'Điều khoản dịch vụ',
+      lastUpdated: 'Cập nhật lần cuối: Tháng 1, 2025',
+      section1Title: '1. Chấp nhận điều khoản',
+      section1Content: 'Bằng việc truy cập và sử dụng IdeaVault, bạn đồng ý tuân theo các Điều khoản dịch vụ này.',
+      section2Title: '2. Sử dụng dịch vụ',
+      section2Content: 'Bạn có thể sử dụng IdeaVault để chia sẻ ý tưởng, bình chọn ý tưởng và tương tác với cộng đồng. Bạn đồng ý không:',
+      section2List: ['Đăng spam hoặc nội dung sai lệch', 'Quấy rối hoặc lạm dụng người dùng khác', 'Vi phạm pháp luật hiện hành', 'Cố gắng hack hoặc phá hoại dịch vụ'],
+      section3Title: '3. Nội dung người dùng',
+      section3Content: 'Bạn giữ quyền sở hữu các ý tưởng bạn đăng. Bằng việc đăng bài, bạn cấp cho IdeaVault quyền hiển thị nội dung của bạn trên nền tảng.',
+      section4Title: '4. Tài khoản',
+      section4Content: 'Bạn chịu trách nhiệm bảo mật tài khoản và tất cả hoạt động trên tài khoản của bạn.',
+      section5Title: '5. Thay đổi',
+      section5Content: 'Chúng tôi có thể cập nhật các điều khoản này bất cứ lúc nào. Việc tiếp tục sử dụng dịch vụ đồng nghĩa với việc chấp nhận các điều khoản đã cập nhật.',
+      section6Title: '6. Liên hệ',
+      section6Content: 'Nếu có câu hỏi về các điều khoản này, vui lòng liên hệ chúng tôi qua nền tảng.',
+    },
+
+    // Privacy Policy
+    privacy: {
+      title: 'Chính sách bảo mật',
+      lastUpdated: 'Cập nhật lần cuối: Tháng 1, 2025',
+      section1Title: '1. Thông tin chúng tôi thu thập',
+      section1Content: 'Khi bạn sử dụng IdeaVault, chúng tôi thu thập:',
+      section1List: ['Thông tin tài khoản (tên, email) từ Google OAuth', 'Ý tưởng và bình luận bạn đăng', 'Lượt vote và mục đã lưu'],
+      section2Title: '2. Cách chúng tôi sử dụng thông tin của bạn',
+      section2Content: 'Chúng tôi sử dụng thông tin của bạn để:',
+      section2List: ['Cung cấp và cải thiện dịch vụ', 'Hiển thị ý tưởng và hồ sơ của bạn cho người dùng khác', 'Gửi thông báo quan trọng về tài khoản của bạn'],
+      section3Title: '3. Lưu trữ dữ liệu',
+      section3Content: 'Dữ liệu của bạn được lưu trữ an toàn trên hạ tầng Supabase với mã hóa khi lưu trữ và truyền tải.',
+      section4Title: '4. Dịch vụ bên thứ ba',
+      section4Content: 'Chúng tôi sử dụng:',
+      section4List: ['Google OAuth để xác thực', 'Supabase cho cơ sở dữ liệu', 'Vercel để hosting'],
+      section5Title: '5. Quyền của bạn',
+      section5Content: 'Bạn có thể yêu cầu xóa tài khoản và dữ liệu của mình bất cứ lúc nào bằng cách liên hệ với chúng tôi.',
+      section6Title: '6. Liên hệ',
+      section6Content: 'Nếu có câu hỏi về bảo mật, vui lòng liên hệ chúng tôi qua nền tảng.',
+    },
   },
 };
 
@@ -505,5 +585,41 @@ export interface TranslationKeys {
     goHome: string;
     accessDenied: string;
     serverError: string;
+  };
+  terms: {
+    title: string;
+    lastUpdated: string;
+    section1Title: string;
+    section1Content: string;
+    section2Title: string;
+    section2Content: string;
+    section2List: string[];
+    section3Title: string;
+    section3Content: string;
+    section4Title: string;
+    section4Content: string;
+    section5Title: string;
+    section5Content: string;
+    section6Title: string;
+    section6Content: string;
+  };
+  privacy: {
+    title: string;
+    lastUpdated: string;
+    section1Title: string;
+    section1Content: string;
+    section1List: string[];
+    section2Title: string;
+    section2Content: string;
+    section2List: string[];
+    section3Title: string;
+    section3Content: string;
+    section4Title: string;
+    section4Content: string;
+    section4List: string[];
+    section5Title: string;
+    section5Content: string;
+    section6Title: string;
+    section6Content: string;
   };
 }

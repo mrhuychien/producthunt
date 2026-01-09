@@ -3,52 +3,55 @@
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Card } from '@/components/ui';
+import { useLanguage } from '@/lib/i18n';
 
 export default function PrivacyPage() {
+  const { t } = useLanguage();
+
   return (
     <div className="min-h-screen bg-[var(--background)]">
       <Header />
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Card className="p-8">
           <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-6">
-            Privacy Policy
+            {t.privacy.title}
           </h1>
 
           <div className="prose prose-sm max-w-none text-[var(--text-secondary)] space-y-4">
-            <p>Last updated: January 2025</p>
+            <p>{t.privacy.lastUpdated}</p>
 
-            <h2 className="text-xl font-semibold text-[var(--text-primary)] mt-6">1. Information We Collect</h2>
-            <p>When you use IdeaVault, we collect:</p>
+            <h2 className="text-xl font-semibold text-[var(--text-primary)] mt-6">{t.privacy.section1Title}</h2>
+            <p>{t.privacy.section1Content}</p>
             <ul className="list-disc ml-6 space-y-2">
-              <li>Account information (name, email) from Google OAuth</li>
-              <li>Ideas and comments you post</li>
-              <li>Votes and saved items</li>
+              {t.privacy.section1List.map((item, i) => (
+                <li key={i}>{item}</li>
+              ))}
             </ul>
 
-            <h2 className="text-xl font-semibold text-[var(--text-primary)] mt-6">2. How We Use Your Information</h2>
-            <p>We use your information to:</p>
+            <h2 className="text-xl font-semibold text-[var(--text-primary)] mt-6">{t.privacy.section2Title}</h2>
+            <p>{t.privacy.section2Content}</p>
             <ul className="list-disc ml-6 space-y-2">
-              <li>Provide and improve our services</li>
-              <li>Display your ideas and profile to other users</li>
-              <li>Send important notifications about your account</li>
+              {t.privacy.section2List.map((item, i) => (
+                <li key={i}>{item}</li>
+              ))}
             </ul>
 
-            <h2 className="text-xl font-semibold text-[var(--text-primary)] mt-6">3. Data Storage</h2>
-            <p>Your data is securely stored using Supabase infrastructure with encryption at rest and in transit.</p>
+            <h2 className="text-xl font-semibold text-[var(--text-primary)] mt-6">{t.privacy.section3Title}</h2>
+            <p>{t.privacy.section3Content}</p>
 
-            <h2 className="text-xl font-semibold text-[var(--text-primary)] mt-6">4. Third-Party Services</h2>
-            <p>We use:</p>
+            <h2 className="text-xl font-semibold text-[var(--text-primary)] mt-6">{t.privacy.section4Title}</h2>
+            <p>{t.privacy.section4Content}</p>
             <ul className="list-disc ml-6 space-y-2">
-              <li>Google OAuth for authentication</li>
-              <li>Supabase for database</li>
-              <li>Vercel for hosting</li>
+              {t.privacy.section4List.map((item, i) => (
+                <li key={i}>{item}</li>
+              ))}
             </ul>
 
-            <h2 className="text-xl font-semibold text-[var(--text-primary)] mt-6">5. Your Rights</h2>
-            <p>You can request to delete your account and data at any time by contacting us.</p>
+            <h2 className="text-xl font-semibold text-[var(--text-primary)] mt-6">{t.privacy.section5Title}</h2>
+            <p>{t.privacy.section5Content}</p>
 
-            <h2 className="text-xl font-semibold text-[var(--text-primary)] mt-6">6. Contact</h2>
-            <p>For privacy concerns, please contact us through the platform.</p>
+            <h2 className="text-xl font-semibold text-[var(--text-primary)] mt-6">{t.privacy.section6Title}</h2>
+            <p>{t.privacy.section6Content}</p>
           </div>
         </Card>
       </main>
