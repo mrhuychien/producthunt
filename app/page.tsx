@@ -326,7 +326,7 @@ export default function Home() {
                               {idea.description}
                             </p>
                             <div className="mt-4 text-sm text-[var(--text-secondary)]">
-                              💬 {idea.commentCount || 0} {t.ideas.comments}
+                              💬 {idea.commentCount ?? 0} {t.ideas.comments}
                             </div>
                           </div>
                         </div>

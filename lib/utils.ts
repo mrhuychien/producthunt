@@ -8,13 +8,19 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Format relative time
-export function formatRelativeTime(date: Date | string): string {
-  const d = typeof date === 'string' ? new Date(date) : date;
-  return formatDistanceToNow(d, { addSuffix: true });
+export function formatRelativeTime(date: Date | string | undefined | null): string {
+  if (!date) return '';
+  try {
+    const d = typeof date === 'string' ? new Date(date) : date;
+    return formatDistanceToNow(d, { addSuffix: true });
+  } catch {
+    return '';
+  }
 }
 
 // Format number with K/M suffix
-export function formatNumber(num: number): string {
+export function formatNumber(num: number | undefined | null): string {
+  if (num === undefined || num === null) return '0';
   if (num >= 1000000) {
     return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
   }

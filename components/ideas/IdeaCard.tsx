@@ -117,7 +117,7 @@ export function IdeaCard({
               {/* Comments */}
               <div className="flex items-center gap-1">
                 <MessageCircle className="w-4 h-4" />
-                <span>{idea.commentCount}</span>
+                <span>{idea.commentCount || 0}</span>
               </div>
             </div>
 
