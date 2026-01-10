@@ -1,6 +1,8 @@
 'use client';
 
-import { signIn } from 'next-auth/react';
+import { useEffect } from 'react';
+import { signIn, useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Target } from 'lucide-react';
 import Link from 'next/link';
@@ -10,6 +12,29 @@ import { LanguageSwitcher } from '@/components/shared/LanguageSwitcher';
 
 export default function LoginPage() {
   const { t } = useLanguage();
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  // Redirect to home if already logged in
+  useEffect(() => {
+    if (status === 'authenticated' && session) {
+      router.replace('/');
+    }
+  }, [session, status, router]);
+
+  // Show loading while checking session
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--primary)]"></div>
+      </div>
+    );
+  }
+
+  // Don't render login form if authenticated (will redirect)
+  if (status === 'authenticated') {
+    return null;
+  }
 
   const handleGoogleLogin = () => {
     signIn('google', { callbackUrl: '/dashboard' });
