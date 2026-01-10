@@ -4,6 +4,7 @@ import {
   getAuthenticatedSession,
   successResponse,
   errorResponse,
+  transformToCamelCase,
 } from '@/lib/api-utils';
 
 // GET /api/comments?ideaId=xxx - Get comments for an idea
@@ -42,7 +43,7 @@ export async function GET(request: NextRequest) {
     }
 
     return successResponse({
-      data: comments || [],
+      data: transformToCamelCase(comments || []),
       total: count || 0,
       page,
       pageSize: limit,
@@ -118,7 +119,7 @@ export async function POST(request: NextRequest) {
       return errorResponse('Failed to create comment', 500);
     }
 
-    return successResponse(comment, 201);
+    return successResponse({ data: transformToCamelCase(comment) }, 201);
   } catch (error) {
     console.error('Error in POST /api/comments:', error);
     return errorResponse('Internal server error', 500);

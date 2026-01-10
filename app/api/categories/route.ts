@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { supabase } from '@/lib/supabase';
-import { successResponse, errorResponse } from '@/lib/api-utils';
+import { successResponse, errorResponse, transformToCamelCase } from '@/lib/api-utils';
 
 // GET /api/categories - Get all categories
 export async function GET(request: NextRequest) {
@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
       return errorResponse('Failed to fetch categories', 500);
     }
 
-    return successResponse(categories || []);
+    return successResponse({ data: transformToCamelCase(categories || []) });
   } catch (error) {
     console.error('Error in GET /api/categories:', error);
     return errorResponse('Internal server error', 500);

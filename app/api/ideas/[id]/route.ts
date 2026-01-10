@@ -6,6 +6,7 @@ import {
   errorResponse,
   notFoundResponse,
   forbiddenResponse,
+  transformToCamelCase,
 } from '@/lib/api-utils';
 
 interface RouteParams {
@@ -57,12 +58,14 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       isSaved = !!saved;
     }
 
-    return successResponse({
+    const transformedIdea = transformToCamelCase({
       ...idea,
       userVote,
       isSaved,
       tags: idea.tags?.map((t: { tag: unknown }) => t.tag) || [],
     });
+
+    return successResponse({ data: transformedIdea });
   } catch (error) {
     console.error('Error in GET /api/ideas/[id]:', error);
     return errorResponse('Internal server error', 500);
@@ -120,7 +123,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       return errorResponse('Failed to update idea', 500);
     }
 
-    return successResponse(idea);
+    return successResponse({ data: transformToCamelCase(idea) });
   } catch (error) {
     console.error('Error in PATCH /api/ideas/[id]:', error);
     return errorResponse('Internal server error', 500);

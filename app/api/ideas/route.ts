@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
-import { getAuthenticatedSession, successResponse, errorResponse } from '@/lib/api-utils';
+import { getAuthenticatedSession, successResponse, errorResponse, transformToCamelCase } from '@/lib/api-utils';
 
 // GET /api/ideas - List all ideas with filters
 export async function GET(request: NextRequest) {
@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
     }
 
     return successResponse({
-      data: ideas || [],
+      data: transformToCamelCase(ideas || []),
       total: count || 0,
       page,
       pageSize: limit,
@@ -149,7 +149,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    return successResponse(idea, 201);
+    return successResponse({ data: transformToCamelCase(idea) }, 201);
   } catch (error) {
     console.error('Error in POST /api/ideas:', error);
     return errorResponse('Internal server error', 500);
