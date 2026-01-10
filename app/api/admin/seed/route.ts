@@ -9,9 +9,22 @@ const VIETNAMESE_NAMES = [
   'Lý Thúy Trang', 'Võ Anh Tuấn', 'Phan Thị Uyên',
 ];
 
-// Generate seed users
+// Generate deterministic UUIDs based on name (so they're consistent across runs)
+function generateUUID(seed: string): string {
+  // Create a simple hash-based UUID v4-like string
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    const char = seed.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  const hex = Math.abs(hash).toString(16).padStart(8, '0');
+  return `${hex.slice(0, 8)}-${hex.slice(0, 4)}-4${hex.slice(1, 4)}-a${hex.slice(1, 4)}-${hex.padEnd(12, '0').slice(0, 12)}`;
+}
+
+// Generate seed users with proper UUIDs
 const SEED_USERS = VIETNAMESE_NAMES.map((name, index) => ({
-  id: `seed-user-${String(index + 1).padStart(3, '0')}`,
+  id: generateUUID(`ideavault-seed-${name}-${index}`),
   name,
   email: `user${index + 1}@ideavault.demo`,
   image: `https://api.dicebear.com/7.x/avataaars/svg?seed=${name.replace(/\s/g, '')}`,
