@@ -709,18 +709,43 @@ export async function POST(request: Request) {
       }
     }
 
-    // 2. Get categories
+    // 2. Seed categories if not exist
+    const SEED_CATEGORIES = [
+      { name: 'Tools', slug: 'tools', icon: 'Wrench', color: '#3B82F6' },
+      { name: 'Apps', slug: 'apps', icon: 'Smartphone', color: '#10B981' },
+      { name: 'Games', slug: 'games', icon: 'Gamepad2', color: '#8B5CF6' },
+      { name: 'Business', slug: 'business', icon: 'Briefcase', color: '#F59E0B' },
+      { name: 'Design', slug: 'design', icon: 'Palette', color: '#EC4899' },
+      { name: 'Education', slug: 'education', icon: 'GraduationCap', color: '#06B6D4' },
+    ];
+
+    for (const cat of SEED_CATEGORIES) {
+      const { data: existingCat } = await supabase
+        .from('categories')
+        .select('id')
+        .eq('slug', cat.slug)
+        .single();
+
+      if (!existingCat) {
+        await supabase.from('categories').insert(cat);
+      }
+    }
+
+    // 3. Get categories
     const { data: categories, error: catError } = await supabase
       .from('categories')
       .select('id, slug');
 
-    if (catError || !categories) {
-      return NextResponse.json({ error: 'Failed to fetch categories' }, { status: 500 });
+    if (catError || !categories || categories.length === 0) {
+      return NextResponse.json({
+        error: 'Failed to fetch categories',
+        details: catError?.message
+      }, { status: 500 });
     }
 
     const categoryMap = new Map(categories.map(c => [c.slug, c.id]));
 
-    // 3. Insert problems
+    // 4. Insert problems
     let successCount = 0;
     const errors: string[] = [];
 
@@ -798,10 +823,15 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       message: `Seeded ${successCount} problems`,
+      usersCreated: SEED_USERS.length,
+      categoriesCreated: SEED_CATEGORIES.length,
       errors: errors.length > 0 ? errors : undefined,
     });
   } catch (error) {
     console.error('Seed error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json({
+      error: 'Internal server error',
+      details: error instanceof Error ? error.message : String(error)
+    }, { status: 500 });
   }
 }
