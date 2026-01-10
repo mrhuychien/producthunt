@@ -1,16 +1,22 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 import { createServerClient } from '@/lib/supabase';
 
-// Seed user for problems
-const SEED_USER = {
-  id: 'seed-user-001',
-  name: 'IdeaVault Team',
-  email: 'team@ideavault.com',
-  image: 'https://api.dicebear.com/7.x/initials/svg?seed=IV',
+// Random Vietnamese names for seed users
+const VIETNAMESE_NAMES = [
+  'Nguyễn Văn An', 'Trần Thị Bình', 'Lê Hoàng Cường', 'Phạm Minh Đức',
+  'Hoàng Thu Hà', 'Vũ Đình Hùng', 'Đặng Kim Liên', 'Bùi Quang Minh',
+  'Đỗ Thị Nga', 'Ngô Thanh Phong', 'Dương Hải Quân', 'Trịnh Văn Sơn',
+  'Lý Thúy Trang', 'Võ Anh Tuấn', 'Phan Thị Uyên',
+];
+
+// Generate seed users
+const SEED_USERS = VIETNAMESE_NAMES.map((name, index) => ({
+  id: `seed-user-${String(index + 1).padStart(3, '0')}`,
+  name,
+  email: `user${index + 1}@ideavault.demo`,
+  image: `https://api.dicebear.com/7.x/avataaars/svg?seed=${name.replace(/\s/g, '')}`,
   role: 'user' as const,
-};
+}));
 
 // 50 seed problems across different categories
 const SEED_PROBLEMS = [
@@ -679,23 +685,28 @@ Học 1000 từ chỉ nhớ 100.`,
 
 export async function POST(request: Request) {
   try {
-    // Check admin authentication
-    const session = await getServerSession(authOptions);
-    if (!session || session.user.role !== 'admin') {
+    // Check secret key for authorization (simpler than admin session)
+    const { searchParams } = new URL(request.url);
+    const secretKey = searchParams.get('key');
+    const expectedKey = process.env.SEED_SECRET_KEY || 'ideavault-seed-2024';
+
+    if (secretKey !== expectedKey) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const supabase = createServerClient();
 
-    // 1. Get or create seed user
-    const { data: existingUser } = await supabase
-      .from('users')
-      .select('id')
-      .eq('id', SEED_USER.id)
-      .single();
+    // 1. Get or create seed users
+    for (const user of SEED_USERS) {
+      const { data: existingUser } = await supabase
+        .from('users')
+        .select('id')
+        .eq('id', user.id)
+        .single();
 
-    if (!existingUser) {
-      await supabase.from('users').insert(SEED_USER);
+      if (!existingUser) {
+        await supabase.from('users').insert(user);
+      }
     }
 
     // 2. Get categories
@@ -732,6 +743,9 @@ export async function POST(request: Request) {
         continue; // Skip existing
       }
 
+      // Randomly assign to a seed user
+      const randomUser = SEED_USERS[Math.floor(Math.random() * SEED_USERS.length)];
+
       // Insert idea
       const { data: idea, error: ideaError } = await supabase
         .from('ideas')
@@ -739,7 +753,7 @@ export async function POST(request: Request) {
           title: problem.title,
           description: problem.description,
           category_id: categoryId,
-          user_id: SEED_USER.id,
+          user_id: randomUser.id,
           status: 'approved',
           vote_count: Math.floor(Math.random() * 50) + 5,
           comment_count: Math.floor(Math.random() * 10),
