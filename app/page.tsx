@@ -8,12 +8,6 @@ import {
   Users,
   Zap,
   ArrowRight,
-  Wrench,
-  Smartphone,
-  Gamepad2,
-  BarChart3,
-  Palette,
-  GraduationCap,
   Target,
   CheckCircle,
   TrendingUp,
@@ -25,14 +19,14 @@ import { VoteButton } from '@/components/ideas/VoteButton';
 import { useLanguage } from '@/lib/i18n';
 import type { Idea } from '@/types';
 
-// Categories
+// Categories with Vietnamese names and slugs
 const categories = [
-  { name: 'Tools', icon: Wrench, color: 'bg-blue-100 text-blue-700' },
-  { name: 'Apps', icon: Smartphone, color: 'bg-green-100 text-green-700' },
-  { name: 'Games', icon: Gamepad2, color: 'bg-purple-100 text-purple-700' },
-  { name: 'Business', icon: BarChart3, color: 'bg-orange-100 text-orange-700' },
-  { name: 'Design', icon: Palette, color: 'bg-pink-100 text-pink-700' },
-  { name: 'Education', icon: GraduationCap, color: 'bg-yellow-100 text-yellow-700' },
+  { name: 'Công cụ', slug: 'tools', icon: '🔧', color: 'bg-blue-100 text-blue-700' },
+  { name: 'Ứng dụng', slug: 'apps', icon: '📱', color: 'bg-green-100 text-green-700' },
+  { name: 'Trò chơi', slug: 'games', icon: '🎮', color: 'bg-purple-100 text-purple-700' },
+  { name: 'Kinh doanh', slug: 'business', icon: '💼', color: 'bg-orange-100 text-orange-700' },
+  { name: 'Thiết kế', slug: 'design', icon: '🎨', color: 'bg-pink-100 text-pink-700' },
+  { name: 'Giáo dục', slug: 'education', icon: '📚', color: 'bg-cyan-100 text-cyan-700' },
 ];
 
 // Animation variants
@@ -371,11 +365,11 @@ export default function Home() {
               className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4"
             >
               {categories.map((category) => (
-                <motion.div key={category.name} variants={fadeInUp}>
-                  <Link href={`/ideas?category=${category.name.toLowerCase()}`}>
+                <motion.div key={category.slug} variants={fadeInUp}>
+                  <Link href={`/ideas?category=${category.slug}`}>
                     <Card hover className="p-6 text-center">
                       <div className={`w-12 h-12 mx-auto rounded-xl flex items-center justify-center mb-3 ${category.color}`}>
-                        <category.icon className="w-6 h-6" />
+                        <span className="text-2xl">{category.icon}</span>
                       </div>
                       <span className="font-medium text-[var(--text-primary)]">
                         {category.name}

@@ -732,12 +732,12 @@ export async function POST(request: Request) {
 
     // 2. Seed categories if not exist
     const SEED_CATEGORIES = [
-      { name: 'Tools', slug: 'tools', icon: 'Wrench', color: '#3B82F6' },
-      { name: 'Apps', slug: 'apps', icon: 'Smartphone', color: '#10B981' },
-      { name: 'Games', slug: 'games', icon: 'Gamepad2', color: '#8B5CF6' },
-      { name: 'Business', slug: 'business', icon: 'Briefcase', color: '#F59E0B' },
-      { name: 'Design', slug: 'design', icon: 'Palette', color: '#EC4899' },
-      { name: 'Education', slug: 'education', icon: 'GraduationCap', color: '#06B6D4' },
+      { name: 'Công cụ', slug: 'tools', icon: '🔧', color: '#3B82F6' },
+      { name: 'Ứng dụng', slug: 'apps', icon: '📱', color: '#10B981' },
+      { name: 'Trò chơi', slug: 'games', icon: '🎮', color: '#8B5CF6' },
+      { name: 'Kinh doanh', slug: 'business', icon: '💼', color: '#F59E0B' },
+      { name: 'Thiết kế', slug: 'design', icon: '🎨', color: '#EC4899' },
+      { name: 'Giáo dục', slug: 'education', icon: '📚', color: '#06B6D4' },
     ];
 
     for (const cat of SEED_CATEGORIES) {
@@ -749,6 +749,12 @@ export async function POST(request: Request) {
 
       if (!existingCat) {
         await supabase.from('categories').insert(cat);
+      } else {
+        // Update existing category with new name and icon
+        await supabase
+          .from('categories')
+          .update({ name: cat.name, icon: cat.icon, color: cat.color })
+          .eq('slug', cat.slug);
       }
     }
 

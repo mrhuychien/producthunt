@@ -67,6 +67,7 @@ export const translations = {
     ideas: {
       title: 'Browse Problems',
       subtitle: 'Discover problems others face and vote if you share the same struggle',
+      exploreByCategory: 'Explore by Category',
       searchPlaceholder: 'Search problems...',
       noResults: 'No problems found',
       noResultsDesc: 'Try adjusting your search or filters',
@@ -339,6 +340,7 @@ export const translations = {
     ideas: {
       title: 'Khám phá Vấn đề',
       subtitle: 'Xem những vấn đề người khác gặp phải và vote nếu bạn cũng có cùng khó khăn',
+      exploreByCategory: 'Khám phá theo danh mục',
       searchPlaceholder: 'Tìm kiếm vấn đề...',
       noResults: 'Không tìm thấy vấn đề',
       noResultsDesc: 'Thử điều chỉnh từ khóa hoặc bộ lọc',
@@ -608,6 +610,7 @@ export interface TranslationKeys {
   ideas: {
     title: string;
     subtitle: string;
+    exploreByCategory: string;
     searchPlaceholder: string;
     noResults: string;
     noResultsDesc: string;

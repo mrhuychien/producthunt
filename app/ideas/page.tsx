@@ -146,11 +146,43 @@ export default function IdeasPage() {
       <Header />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Page Header */}
+        {/* Category Exploration Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
+        >
+          <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">
+            {t.ideas.exploreByCategory || 'Khám phá theo danh mục'}
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+            {categories.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => setSelectedCategory(
+                  selectedCategory === category.id ? undefined : category.id
+                )}
+                className={`p-4 rounded-xl border-2 transition-all text-center hover:shadow-md ${
+                  selectedCategory === category.id
+                    ? 'border-[var(--primary)] bg-[var(--primary)]/5'
+                    : 'border-[var(--border)] hover:border-[var(--primary)]/50'
+                }`}
+              >
+                <span className="text-2xl block mb-1">{category.icon}</span>
+                <span className="text-sm font-medium text-[var(--text-primary)]">
+                  {category.name}
+                </span>
+              </button>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Page Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="mb-6"
         >
           <h1 className="text-3xl font-bold text-[var(--text-primary)]">
             {t.ideas.title}
