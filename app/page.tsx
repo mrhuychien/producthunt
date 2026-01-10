@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
-  Lightbulb,
-  ThumbsUp,
-  Rocket,
+  MessageSquare,
+  Users,
+  Zap,
   ArrowRight,
   Wrench,
   Smartphone,
@@ -14,6 +14,9 @@ import {
   BarChart3,
   Palette,
   GraduationCap,
+  Target,
+  CheckCircle,
+  TrendingUp,
 } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -87,9 +90,10 @@ export default function Home() {
               transition={{ duration: 0.6 }}
               className="text-center max-w-3xl mx-auto"
             >
-              <Badge variant="primary" size="lg" className="mb-6">
-                {t.landing.heroTitle}
-              </Badge>
+              <div className="inline-flex items-center gap-2 bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full mb-6">
+                <Target className="w-4 h-4" />
+                <span className="text-sm font-medium">{t.landing.heroBadge}</span>
+              </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)] leading-tight">
                 {t.landing.heroTitle}
@@ -101,7 +105,7 @@ export default function Home() {
 
               <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link href="/submit">
-                  <Button size="lg" rightIcon={<Lightbulb className="w-5 h-5" />}>
+                  <Button size="lg" rightIcon={<MessageSquare className="w-5 h-5" />}>
                     {t.landing.ctaSubmit}
                   </Button>
                 </Link>
@@ -139,10 +143,10 @@ export default function Home() {
               {/* Step 1 */}
               <motion.div variants={fadeInUp}>
                 <Card className="p-8 text-center h-full">
-                  <div className="w-16 h-16 mx-auto bg-indigo-100 rounded-2xl flex items-center justify-center mb-6">
-                    <Lightbulb className="w-8 h-8 text-[var(--primary)]" />
+                  <div className="w-16 h-16 mx-auto bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
+                    <MessageSquare className="w-8 h-8 text-blue-600" />
                   </div>
-                  <div className="text-sm font-medium text-[var(--primary)] mb-2">1</div>
+                  <div className="text-sm font-medium text-blue-600 mb-2">1</div>
                   <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
                     {t.landing.step1Title}
                   </h3>
@@ -156,9 +160,9 @@ export default function Home() {
               <motion.div variants={fadeInUp}>
                 <Card className="p-8 text-center h-full">
                   <div className="w-16 h-16 mx-auto bg-green-100 rounded-2xl flex items-center justify-center mb-6">
-                    <ThumbsUp className="w-8 h-8 text-[var(--success)]" />
+                    <Users className="w-8 h-8 text-green-600" />
                   </div>
-                  <div className="text-sm font-medium text-[var(--success)] mb-2">2</div>
+                  <div className="text-sm font-medium text-green-600 mb-2">2</div>
                   <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
                     {t.landing.step2Title}
                   </h3>
@@ -172,9 +176,9 @@ export default function Home() {
               <motion.div variants={fadeInUp}>
                 <Card className="p-8 text-center h-full">
                   <div className="w-16 h-16 mx-auto bg-purple-100 rounded-2xl flex items-center justify-center mb-6">
-                    <Rocket className="w-8 h-8 text-[var(--secondary)]" />
+                    <Zap className="w-8 h-8 text-purple-600" />
                   </div>
-                  <div className="text-sm font-medium text-[var(--secondary)] mb-2">3</div>
+                  <div className="text-sm font-medium text-purple-600 mb-2">3</div>
                   <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
                     {t.landing.step3Title}
                   </h3>
@@ -187,8 +191,77 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Trending Ideas Section */}
+        {/* Why It Works Section */}
         <section className="py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
+              <h2 className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)]">
+                {t.landing.whyItWorks}
+              </h2>
+            </motion.div>
+
+            <motion.div
+              variants={stagger}
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true }}
+              className="grid md:grid-cols-3 gap-8"
+            >
+              {/* Reason 1 */}
+              <motion.div variants={fadeInUp}>
+                <Card className="p-8 h-full bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200 dark:border-blue-800">
+                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
+                    <Target className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
+                    {t.landing.reason1Title}
+                  </h3>
+                  <p className="text-[var(--text-secondary)]">
+                    {t.landing.reason1Desc}
+                  </p>
+                </Card>
+              </motion.div>
+
+              {/* Reason 2 */}
+              <motion.div variants={fadeInUp}>
+                <Card className="p-8 h-full bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 border-green-200 dark:border-green-800">
+                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4">
+                    <CheckCircle className="w-6 h-6 text-green-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
+                    {t.landing.reason2Title}
+                  </h3>
+                  <p className="text-[var(--text-secondary)]">
+                    {t.landing.reason2Desc}
+                  </p>
+                </Card>
+              </motion.div>
+
+              {/* Reason 3 */}
+              <motion.div variants={fadeInUp}>
+                <Card className="p-8 h-full bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 border-purple-200 dark:border-purple-800">
+                  <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                    <TrendingUp className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
+                    {t.landing.reason3Title}
+                  </h3>
+                  <p className="text-[var(--text-secondary)]">
+                    {t.landing.reason3Desc}
+                  </p>
+                </Card>
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Trending Ideas Section */}
+        <section className="py-20 bg-[var(--surface)]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0 }}
@@ -277,7 +350,7 @@ export default function Home() {
         </section>
 
         {/* Categories Section */}
-        <section className="py-20 bg-[var(--surface)]">
+        <section className="py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0 }}
