@@ -697,6 +697,9 @@ export async function POST(request: Request) {
     const supabase = createServerClient();
 
     // 1. Get or create seed users
+    let usersCreatedCount = 0;
+    const userErrors: string[] = [];
+
     for (const user of SEED_USERS) {
       const { data: existingUser } = await supabase
         .from('users')
@@ -705,7 +708,12 @@ export async function POST(request: Request) {
         .single();
 
       if (!existingUser) {
-        await supabase.from('users').insert(user);
+        const { error: userError } = await supabase.from('users').insert(user);
+        if (userError) {
+          userErrors.push(`User ${user.name}: ${userError.message}`);
+        } else {
+          usersCreatedCount++;
+        }
       }
     }
 
@@ -787,7 +795,7 @@ export async function POST(request: Request) {
         .single();
 
       if (ideaError) {
-        errors.push(`Error inserting: ${problem.title}`);
+        errors.push(`Error inserting "${problem.title}": ${ideaError.message} (code: ${ideaError.code})`);
         continue;
       }
 
@@ -821,11 +829,12 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({
-      success: true,
+      success: successCount > 0,
       message: `Seeded ${successCount} problems`,
-      usersCreated: SEED_USERS.length,
+      usersCreated: usersCreatedCount,
       categoriesCreated: SEED_CATEGORIES.length,
-      errors: errors.length > 0 ? errors : undefined,
+      userErrors: userErrors.length > 0 ? userErrors : undefined,
+      problemErrors: errors.length > 0 ? errors : undefined,
     });
   } catch (error) {
     console.error('Seed error:', error);
