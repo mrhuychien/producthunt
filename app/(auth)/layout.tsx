@@ -35,7 +35,7 @@ export default function AuthLayout({
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      <Header user={session.user} />
+      <Header />
       <div className="flex">
         <Sidebar isAdmin={session.user.role === 'admin'} />
         <main className="flex-1 p-6 lg:p-8">

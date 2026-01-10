@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { motion } from 'framer-motion';
 import { Target, Menu, X, Search } from 'lucide-react';
 import { useState } from 'react';
@@ -10,18 +11,13 @@ import { LanguageSwitcher } from '@/components/shared/LanguageSwitcher';
 import { useLanguage } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 
-interface HeaderProps {
-  user?: {
-    name?: string | null;
-    email?: string | null;
-    image?: string | null;
-  } | null;
-}
-
-export function Header({ user }: HeaderProps) {
+export function Header() {
   const pathname = usePathname();
+  const { data: session } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t } = useLanguage();
+
+  const user = session?.user;
 
   const navLinks = [
     { href: '/ideas', label: t.nav.browseIdeas },

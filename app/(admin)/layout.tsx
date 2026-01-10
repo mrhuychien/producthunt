@@ -38,7 +38,7 @@ export default function AdminLayout({
   if (session.user.role !== 'admin') {
     return (
       <div className="min-h-screen bg-[var(--background)]">
-        <Header user={session.user} />
+        <Header />
         <div className="flex items-center justify-center p-8">
           <Card className="p-8 text-center max-w-md">
             <ShieldAlert className="w-16 h-16 mx-auto text-[var(--danger)] mb-4" />
@@ -57,7 +57,7 @@ export default function AdminLayout({
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      <Header user={session.user} />
+      <Header />
       <div className="flex">
         <Sidebar isAdmin={true} />
         <main className="flex-1 p-6 lg:p-8">
