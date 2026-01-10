@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Lightbulb, Menu, X, Search } from 'lucide-react';
+import { Target, Menu, X, Search } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui';
 import { LanguageSwitcher } from '@/components/shared/LanguageSwitcher';
@@ -38,7 +38,7 @@ export function Header({ user }: HeaderProps) {
               whileHover={{ rotate: 15 }}
               className="p-2 bg-[var(--primary)] rounded-lg"
             >
-              <Lightbulb className="w-5 h-5 text-white" />
+              <Target className="w-5 h-5 text-white" />
             </motion.div>
             <span className="text-xl font-bold text-[var(--text-primary)]">
               IdeaVault

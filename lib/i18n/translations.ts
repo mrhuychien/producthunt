@@ -22,10 +22,10 @@ export const translations = {
     // Navigation
     nav: {
       home: 'Home',
-      browseIdeas: 'Browse Ideas',
-      submitIdea: 'Submit Idea',
+      browseIdeas: 'Browse Problems',
+      submitIdea: 'Share Problem',
       dashboard: 'Dashboard',
-      myIdeas: 'My Ideas',
+      myIdeas: 'My Problems',
       saved: 'Saved',
       settings: 'Settings',
       login: 'Login',
@@ -78,11 +78,13 @@ export const translations = {
       newest: 'Newest',
       popular: 'Most Related',
       trending: 'Trending',
+      problemsFound: 'problems found',
+      problemFound: 'problem found',
     },
 
     // Idea Detail
     ideaDetail: {
-      backToIdeas: 'Back to Ideas',
+      backToIdeas: 'Back to Problems',
       share: 'Share',
       report: 'Report',
       commentsTitle: 'Comments',
@@ -117,18 +119,18 @@ export const translations = {
     dashboard: {
       title: 'Dashboard',
       welcome: 'Welcome back',
-      totalIdeas: 'Total Ideas',
+      totalIdeas: 'Problems Shared',
       totalVotes: 'Total Votes',
       totalComments: 'Total Comments',
-      savedIdeas: 'Saved Ideas',
-      recentIdeas: 'Recent Ideas',
+      savedIdeas: 'Saved Problems',
+      recentIdeas: 'Recent Problems',
       quickActions: 'Quick Actions',
     },
 
     // Auth
     auth: {
       welcomeBack: 'Welcome back',
-      signInSubtitle: 'Sign in to share and vote on ideas',
+      signInSubtitle: 'Sign in to share your problems and vote on others',
       continueWithGoogle: 'Continue with Google',
       termsAgree: 'By signing in, you agree to our',
       termsOfService: 'Terms of Service',
@@ -292,10 +294,10 @@ export const translations = {
     // Navigation
     nav: {
       home: 'Trang chủ',
-      browseIdeas: 'Khám phá',
-      submitIdea: 'Đăng ý tưởng',
+      browseIdeas: 'Khám phá Vấn đề',
+      submitIdea: 'Chia sẻ Vấn đề',
       dashboard: 'Bảng điều khiển',
-      myIdeas: 'Ý tưởng của tôi',
+      myIdeas: 'Vấn đề của tôi',
       saved: 'Đã lưu',
       settings: 'Cài đặt',
       login: 'Đăng nhập',
@@ -348,6 +350,8 @@ export const translations = {
       newest: 'Mới nhất',
       popular: 'Nhiều người gặp',
       trending: 'Xu hướng',
+      problemsFound: 'vấn đề được tìm thấy',
+      problemFound: 'vấn đề được tìm thấy',
     },
 
     // Idea Detail
@@ -387,18 +391,18 @@ export const translations = {
     dashboard: {
       title: 'Bảng điều khiển',
       welcome: 'Chào mừng trở lại',
-      totalIdeas: 'Tổng ý tưởng',
+      totalIdeas: 'Vấn đề đã chia sẻ',
       totalVotes: 'Tổng lượt vote',
       totalComments: 'Tổng bình luận',
-      savedIdeas: 'Đã lưu',
-      recentIdeas: 'Ý tưởng gần đây',
+      savedIdeas: 'Vấn đề đã lưu',
+      recentIdeas: 'Vấn đề gần đây',
       quickActions: 'Thao tác nhanh',
     },
 
     // Auth
     auth: {
       welcomeBack: 'Chào mừng trở lại',
-      signInSubtitle: 'Đăng nhập để chia sẻ và bình chọn ý tưởng',
+      signInSubtitle: 'Đăng nhập để chia sẻ vấn đề của bạn và vote cho người khác',
       continueWithGoogle: 'Tiếp tục với Google',
       termsAgree: 'Bằng việc đăng nhập, bạn đồng ý với',
       termsOfService: 'Điều khoản dịch vụ',
@@ -615,6 +619,8 @@ export interface TranslationKeys {
     newest: string;
     popular: string;
     trending: string;
+    problemsFound: string;
+    problemFound: string;
   };
   ideaDetail: {
     backToIdeas: string;

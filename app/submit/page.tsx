@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Lightbulb, Eye, Send } from 'lucide-react';
+import { ArrowLeft, MessageSquare, Eye, Send } from 'lucide-react';
 import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -151,7 +151,7 @@ export default function SubmitIdeaPage() {
         >
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-[var(--primary)]/10 rounded-lg">
-              <Lightbulb className="w-6 h-6 text-[var(--primary)]" />
+              <MessageSquare className="w-6 h-6 text-[var(--primary)]" />
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)]">
               {t.submitIdea.title}

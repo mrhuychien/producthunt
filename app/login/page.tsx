@@ -2,7 +2,7 @@
 
 import { signIn } from 'next-auth/react';
 import { motion } from 'framer-motion';
-import { Lightbulb } from 'lucide-react';
+import { Target } from 'lucide-react';
 import Link from 'next/link';
 import { Button, Card } from '@/components/ui';
 import { useLanguage } from '@/lib/i18n';
@@ -32,7 +32,7 @@ export default function LoginPage() {
           {/* Logo */}
           <Link href="/" className="flex items-center justify-center gap-2 mb-8">
             <div className="p-2 bg-[var(--primary)] rounded-lg">
-              <Lightbulb className="w-6 h-6 text-white" />
+              <Target className="w-6 h-6 text-white" />
             </div>
             <span className="text-2xl font-bold text-[var(--text-primary)]">
               IdeaVault

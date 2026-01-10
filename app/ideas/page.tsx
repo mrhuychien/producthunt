@@ -203,7 +203,7 @@ export default function IdeasPage() {
         {/* Results Count */}
         <div className="mb-4">
           <Badge variant="default">
-            {totalCount} idea{totalCount !== 1 ? 's' : ''} found
+            {totalCount} {totalCount !== 1 ? t.ideas.problemsFound : t.ideas.problemFound}
           </Badge>
         </div>
 

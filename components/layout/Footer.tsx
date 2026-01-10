@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Lightbulb, Github, Twitter } from 'lucide-react';
+import { Target, Github, Twitter } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
 
 const socialLinks = [
@@ -32,7 +32,7 @@ export function Footer() {
           <div className="col-span-1 md:col-span-2">
             <Link href="/" className="flex items-center gap-2">
               <div className="p-2 bg-[var(--primary)] rounded-lg">
-                <Lightbulb className="w-5 h-5 text-white" />
+                <Target className="w-5 h-5 text-white" />
               </div>
               <span className="text-xl font-bold text-[var(--text-primary)]">
                 IdeaVault
