@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import {
   LayoutDashboard,
   PlusCircle,
-  Lightbulb,
+  Target,
   Bookmark,
   Settings,
   Shield,
@@ -14,27 +14,29 @@ import {
   Users,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/lib/i18n';
 
 interface SidebarProps {
   isAdmin?: boolean;
 }
 
-const userLinks = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/submit', label: 'Submit Idea', icon: PlusCircle },
-  { href: '/my-ideas', label: 'My Ideas', icon: Lightbulb },
-  { href: '/saved', label: 'Saved', icon: Bookmark },
-  { href: '/settings', label: 'Settings', icon: Settings },
-];
-
-const adminLinks = [
-  { href: '/moderate', label: 'Moderate', icon: Shield },
-  { href: '/users', label: 'Users', icon: Users },
-  { href: '/analytics', label: 'Analytics', icon: BarChart3 },
-];
-
 export function Sidebar({ isAdmin = false }: SidebarProps) {
   const pathname = usePathname();
+  const { t } = useLanguage();
+
+  const userLinks = [
+    { href: '/dashboard', label: t.nav.dashboard, icon: LayoutDashboard },
+    { href: '/submit', label: t.nav.submitIdea, icon: PlusCircle },
+    { href: '/my-ideas', label: t.nav.myIdeas, icon: Target },
+    { href: '/saved', label: t.nav.saved, icon: Bookmark },
+    { href: '/settings', label: t.nav.settings, icon: Settings },
+  ];
+
+  const adminLinks = [
+    { href: '/moderate', label: t.nav.moderate, icon: Shield },
+    { href: '/users', label: t.nav.users, icon: Users },
+    { href: '/analytics', label: t.nav.analytics, icon: BarChart3 },
+  ];
 
   return (
     <aside className="w-64 bg-[var(--surface)] border-r border-[var(--border)] min-h-[calc(100vh-4rem)]">
@@ -73,7 +75,7 @@ export function Sidebar({ isAdmin = false }: SidebarProps) {
             <div className="my-6 border-t border-[var(--border)]" />
             <div className="mb-2 px-3">
               <span className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
-                Admin
+                {t.nav.admin}
               </span>
             </div>
             <nav className="space-y-1">
