@@ -6,21 +6,18 @@ import {
   errorResponse,
 } from '@/lib/api-utils';
 
-// POST /api/votes - Create or update a vote
+// POST /api/votes - Toggle upvote on an idea
 export async function POST(request: NextRequest) {
   try {
     const { session, error: authError } = await getAuthenticatedSession();
     if (authError) return authError;
 
     const body = await request.json();
-    const { ideaId, value } = body;
+    const { ideaId } = body;
 
     // Validation
     if (!ideaId) {
       return errorResponse('Idea ID is required');
-    }
-    if (value !== 1 && value !== -1) {
-      return errorResponse('Vote value must be 1 (upvote) or -1 (downvote)');
     }
 
     // Check if idea exists and get current vote count
@@ -43,50 +40,32 @@ export async function POST(request: NextRequest) {
       .single();
 
     let newVoteCount = idea.vote_count || 0;
-    let resultValue = 0;
+    let hasVoted = false;
     let action = '';
 
     if (existingVote) {
-      if (existingVote.value === value) {
-        // Same vote - remove it (toggle off)
-        const { error } = await supabase
-          .from('votes')
-          .delete()
-          .eq('id', existingVote.id);
+      // Has existing vote - remove it (toggle off)
+      const { error } = await supabase
+        .from('votes')
+        .delete()
+        .eq('id', existingVote.id);
 
-        if (error) {
-          console.error('Error removing vote:', error);
-          return errorResponse('Failed to remove vote', 500);
-        }
-
-        newVoteCount -= existingVote.value;
-        action = 'removed';
-        resultValue = 0;
-      } else {
-        // Different vote - update it
-        const { error } = await supabase
-          .from('votes')
-          .update({ value })
-          .eq('id', existingVote.id);
-
-        if (error) {
-          console.error('Error updating vote:', error);
-          return errorResponse('Failed to update vote', 500);
-        }
-
-        // Remove old vote, add new vote
-        newVoteCount = newVoteCount - existingVote.value + value;
-        action = 'updated';
-        resultValue = value;
+      if (error) {
+        console.error('Error removing vote:', error);
+        return errorResponse('Failed to remove vote', 500);
       }
+
+      newVoteCount -= existingVote.value;
+      action = 'removed';
+      hasVoted = false;
     } else {
-      // New vote
+      // No existing vote - create upvote
       const { error } = await supabase
         .from('votes')
         .insert({
           idea_id: ideaId,
           user_id: session!.user.id,
-          value,
+          value: 1,
         });
 
       if (error) {
@@ -94,9 +73,9 @@ export async function POST(request: NextRequest) {
         return errorResponse('Failed to create vote', 500);
       }
 
-      newVoteCount += value;
+      newVoteCount += 1;
       action = 'created';
-      resultValue = value;
+      hasVoted = true;
     }
 
     // Update vote_count in ideas table
@@ -105,14 +84,14 @@ export async function POST(request: NextRequest) {
       .update({ vote_count: newVoteCount })
       .eq('id', ideaId);
 
-    return successResponse({ data: { action, value: resultValue, newVoteCount } }, action === 'created' ? 201 : 200);
+    return successResponse({ data: { action, hasVoted, newVoteCount } }, action === 'created' ? 201 : 200);
   } catch (error) {
     console.error('Error in POST /api/votes:', error);
     return errorResponse('Internal server error', 500);
   }
 }
 
-// GET /api/votes?ideaId=xxx - Get vote for an idea
+// GET /api/votes?ideaId=xxx - Get vote status for an idea
 export async function GET(request: NextRequest) {
   try {
     const { session, error: authError } = await getAuthenticatedSession();
@@ -137,7 +116,7 @@ export async function GET(request: NextRequest) {
       return errorResponse('Failed to fetch vote', 500);
     }
 
-    return successResponse({ data: { value: vote?.value || 0 } });
+    return successResponse({ data: { hasVoted: !!vote, value: vote?.value || 0 } });
   } catch (error) {
     console.error('Error in GET /api/votes:', error);
     return errorResponse('Internal server error', 500);

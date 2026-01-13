@@ -10,7 +10,7 @@ import type { Idea } from '@/types';
 
 interface IdeaCardProps {
   idea: Idea;
-  onVote?: (ideaId: string, value: 1 | -1) => void;
+  onVote?: (ideaId: string) => void;
   onSave?: (ideaId: string) => void;
   showActions?: boolean;
 }
@@ -21,9 +21,9 @@ export function IdeaCard({
   onSave,
   showActions = true,
 }: IdeaCardProps) {
-  const handleVote = (value: 1 | -1) => {
+  const handleVote = () => {
     if (onVote) {
-      onVote(idea.id, value);
+      onVote(idea.id);
     }
   };
 
@@ -46,7 +46,7 @@ export function IdeaCard({
           {/* Vote Section */}
           <VoteButton
             voteCount={idea.voteCount}
-            userVote={idea.userVote}
+            hasVoted={idea.userVote === 1}
             onVote={handleVote}
             disabled={!onVote}
             size="md"

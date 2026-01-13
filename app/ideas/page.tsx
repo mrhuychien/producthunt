@@ -78,7 +78,7 @@ export default function IdeasPage() {
     setSearch(value);
   };
 
-  const handleVote = async (ideaId: string, value: 1 | -1) => {
+  const handleVote = async (ideaId: string) => {
     if (!session) {
       window.location.href = '/login';
       return;
@@ -88,7 +88,7 @@ export default function IdeasPage() {
       const res = await fetch('/api/votes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ideaId, value }),
+        body: JSON.stringify({ ideaId }),
       });
 
       if (res.ok) {
@@ -99,7 +99,7 @@ export default function IdeasPage() {
             return {
               ...idea,
               voteCount: data.data.newVoteCount,
-              userVote: data.data.value,
+              userVote: data.data.hasVoted ? 1 : 0,
             };
           }
           return idea;

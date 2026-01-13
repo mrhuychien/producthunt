@@ -88,7 +88,7 @@ export default function IdeaDetailPage() {
     }
   }, [ideaId, idea]);
 
-  const handleVote = async (value: 1 | -1) => {
+  const handleVote = async () => {
     if (!session) {
       window.location.href = '/login';
       return;
@@ -99,7 +99,7 @@ export default function IdeaDetailPage() {
       const res = await fetch('/api/votes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ideaId: idea.id, value }),
+        body: JSON.stringify({ ideaId: idea.id }),
       });
 
       if (res.ok) {
@@ -107,7 +107,7 @@ export default function IdeaDetailPage() {
         setIdea(prev => prev ? {
           ...prev,
           voteCount: data.data.newVoteCount,
-          userVote: data.data.value,
+          userVote: data.data.hasVoted ? 1 : 0,
         } : null);
       }
     } catch (err) {
@@ -282,7 +282,7 @@ export default function IdeaDetailPage() {
               <div className="flex-shrink-0">
                 <VoteButton
                   voteCount={idea.voteCount}
-                  userVote={idea.userVote}
+                  hasVoted={idea.userVote === 1}
                   onVote={handleVote}
                   size="lg"
                 />

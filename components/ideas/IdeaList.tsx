@@ -6,7 +6,7 @@ import type { Idea } from '@/types';
 
 interface IdeaListProps {
   ideas: Idea[];
-  onVote?: (ideaId: string, value: 1 | -1) => void;
+  onVote?: (ideaId: string) => void;
   onSave?: (ideaId: string) => void;
   emptyMessage?: string;
 }

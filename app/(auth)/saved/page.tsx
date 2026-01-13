@@ -50,31 +50,27 @@ export default function SavedIdeasPage() {
     }
   };
 
-  const handleVote = async (ideaId: string, value: 1 | -1) => {
+  const handleVote = async (ideaId: string) => {
     try {
-      await fetch('/api/votes', {
+      const res = await fetch('/api/votes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ideaId, value }),
+        body: JSON.stringify({ ideaId }),
       });
-      // Optimistic update
-      setIdeas(ideas.map((idea) => {
-        if (idea.id === ideaId) {
-          const prevVote = idea.userVote || 0;
-          let newCount = idea.voteCount;
-          if (prevVote === value) {
-            newCount -= value;
-          } else {
-            newCount = idea.voteCount - prevVote + value;
+
+      if (res.ok) {
+        const data = await res.json();
+        setIdeas(ideas.map((idea) => {
+          if (idea.id === ideaId) {
+            return {
+              ...idea,
+              voteCount: data.data.newVoteCount,
+              userVote: data.data.hasVoted ? 1 : 0,
+            };
           }
-          return {
-            ...idea,
-            voteCount: newCount,
-            userVote: prevVote === value ? 0 : value,
-          };
-        }
-        return idea;
-      }));
+          return idea;
+        }));
+      }
     } catch (error) {
       console.error('Error voting:', error);
     }
