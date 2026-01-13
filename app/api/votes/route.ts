@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
       .update({ vote_count: newVoteCount })
       .eq('id', ideaId);
 
-    return successResponse({ action, value: resultValue, newVoteCount }, action === 'created' ? 201 : 200);
+    return successResponse({ data: { action, value: resultValue, newVoteCount } }, action === 'created' ? 201 : 200);
   } catch (error) {
     console.error('Error in POST /api/votes:', error);
     return errorResponse('Internal server error', 500);
@@ -137,7 +137,7 @@ export async function GET(request: NextRequest) {
       return errorResponse('Failed to fetch vote', 500);
     }
 
-    return successResponse({ value: vote?.value || 0 });
+    return successResponse({ data: { value: vote?.value || 0 } });
   } catch (error) {
     console.error('Error in GET /api/votes:', error);
     return errorResponse('Internal server error', 500);

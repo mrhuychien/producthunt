@@ -4,6 +4,7 @@ import {
   getAuthenticatedSession,
   successResponse,
   errorResponse,
+  transformToCamelCase,
 } from '@/lib/api-utils';
 
 // GET /api/saved - Get user's saved ideas
@@ -46,7 +47,7 @@ export async function GET(request: NextRequest) {
     })) || [];
 
     return successResponse({
-      data: ideas,
+      data: transformToCamelCase(ideas),
       total: count || 0,
       page,
       pageSize: limit,
@@ -91,7 +92,7 @@ export async function POST(request: NextRequest) {
         return errorResponse('Failed to unsave idea', 500);
       }
 
-      return successResponse({ action: 'unsaved', isSaved: false });
+      return successResponse({ data: { action: 'unsaved', saved: false } });
     } else {
       // Save
       const { error } = await supabase
@@ -106,7 +107,7 @@ export async function POST(request: NextRequest) {
         return errorResponse('Failed to save idea', 500);
       }
 
-      return successResponse({ action: 'saved', isSaved: true }, 201);
+      return successResponse({ data: { action: 'saved', saved: true } }, 201);
     }
   } catch (error) {
     console.error('Error in POST /api/saved:', error);
