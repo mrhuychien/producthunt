@@ -39,11 +39,21 @@ export function VoteButton({
 }: VoteButtonProps) {
   const styles = sizeStyles[size];
 
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('VoteButton clicked, disabled:', disabled);
+    if (!disabled && onVote) {
+      onVote();
+    }
+  };
+
   return (
     <motion.button
+      type="button"
       whileHover={{ scale: disabled ? 1 : 1.05 }}
       whileTap={{ scale: disabled ? 1 : 0.95 }}
-      onClick={onVote}
+      onClick={handleClick}
       disabled={disabled}
       className={cn(
         'flex items-center rounded-lg border transition-all',

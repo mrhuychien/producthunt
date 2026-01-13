@@ -10,10 +10,23 @@ import {
 export async function POST(request: NextRequest) {
   try {
     const { session, error: authError } = await getAuthenticatedSession();
-    if (authError) return authError;
+    if (authError) {
+      console.log('Vote auth error - user not authenticated');
+      return authError;
+    }
+
+    console.log('Vote request from user:', session?.user?.id, session?.user?.email);
+
+    // Check if user ID exists
+    if (!session?.user?.id) {
+      console.error('User ID not found in session');
+      return errorResponse('User ID not found. Please log out and log back in.', 401);
+    }
 
     const body = await request.json();
     const { ideaId } = body;
+
+    console.log('Vote for ideaId:', ideaId, 'by userId:', session.user.id);
 
     // Validation
     if (!ideaId) {

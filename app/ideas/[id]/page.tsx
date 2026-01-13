@@ -102,16 +102,20 @@ export default function IdeaDetailPage() {
         body: JSON.stringify({ ideaId: idea.id }),
       });
 
-      if (res.ok) {
-        const data = await res.json();
+      const data = await res.json();
+      console.log('Vote response:', res.status, data);
+
+      if (res.ok && data.data) {
         setIdea(prev => prev ? {
           ...prev,
           voteCount: data.data.newVoteCount,
           userVote: data.data.hasVoted ? 1 : 0,
         } : null);
+      } else {
+        console.error('Vote failed:', data.error || 'Unknown error');
       }
     } catch (err) {
-      // Silent fail
+      console.error('Vote error:', err);
     }
   };
 
