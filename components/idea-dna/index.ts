@@ -1,0 +1,1 @@
+export { IdeaDNA } from './IdeaDNA';
