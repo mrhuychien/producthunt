@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createServerClient } from '@/lib/supabase';
 import {
   getAuthenticatedSession,
   successResponse,
@@ -32,6 +32,9 @@ export async function POST(request: NextRequest) {
     if (!ideaId) {
       return errorResponse('Idea ID is required');
     }
+
+    // Use service role client to bypass RLS
+    const supabase = createServerClient();
 
     // Check if idea exists and get current vote count
     const { data: idea, error: ideaError } = await supabase
@@ -117,6 +120,7 @@ export async function GET(request: NextRequest) {
       return errorResponse('Idea ID is required');
     }
 
+    const supabase = createServerClient();
     const { data: vote, error } = await supabase
       .from('votes')
       .select('value')
