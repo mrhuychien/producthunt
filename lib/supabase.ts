@@ -453,6 +453,41 @@ export type Database = {
           created_at?: string;
         };
       };
+      idea_difficulty_ratings: {
+        Row: {
+          id: string;
+          idea_id: string;
+          difficulty_score: number;
+          estimated_hours: number;
+          tech_stack: string[];
+          required_skills: string[];
+          complexity_factors: string[];
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          idea_id: string;
+          difficulty_score: number;
+          estimated_hours: number;
+          tech_stack: string[];
+          required_skills: string[];
+          complexity_factors: string[];
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          idea_id?: string;
+          difficulty_score?: number;
+          estimated_hours?: number;
+          tech_stack?: string[];
+          required_skills?: string[];
+          complexity_factors?: string[];
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
     };
   };
 };

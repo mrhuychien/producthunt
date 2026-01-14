@@ -192,3 +192,16 @@ export interface IdeaInterest {
   note?: string;
   createdAt: Date;
 }
+
+// AI Difficulty Rating types
+export interface IdeaDifficultyRating {
+  id: string;
+  ideaId: string;
+  difficultyScore: number; // 1-5 stars
+  estimatedHours: number;
+  techStack: string[];
+  requiredSkills: string[];
+  complexityFactors: string[];
+  createdAt: Date;
+  updatedAt: Date;
+}
