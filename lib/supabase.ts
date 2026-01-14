@@ -488,6 +488,38 @@ export type Database = {
           updated_at?: string;
         };
       };
+      idea_bounties: {
+        Row: {
+          id: string;
+          idea_id: string;
+          user_id: string;
+          amount: number;
+          currency: string;
+          message: string | null;
+          status: 'pledged' | 'paid' | 'cancelled';
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          idea_id: string;
+          user_id: string;
+          amount: number;
+          currency?: string;
+          message?: string | null;
+          status?: 'pledged' | 'paid' | 'cancelled';
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          idea_id?: string;
+          user_id?: string;
+          amount?: number;
+          currency?: string;
+          message?: string | null;
+          status?: 'pledged' | 'paid' | 'cancelled';
+          created_at?: string;
+        };
+      };
     };
   };
 };

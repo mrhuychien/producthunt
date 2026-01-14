@@ -205,3 +205,18 @@ export interface IdeaDifficultyRating {
   createdAt: Date;
   updatedAt: Date;
 }
+
+// Micro-Bounty System types
+export type BountyStatus = 'pledged' | 'paid' | 'cancelled';
+
+export interface IdeaBounty {
+  id: string;
+  ideaId: string;
+  userId: string;
+  user?: User;
+  amount: number;
+  currency: string;
+  message?: string;
+  status: BountyStatus;
+  createdAt: Date;
+}
