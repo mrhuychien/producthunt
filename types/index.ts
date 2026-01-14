@@ -111,3 +111,18 @@ export interface IdeaFilters {
   search?: string;
   sortBy?: 'newest' | 'popular' | 'trending';
 }
+
+// AI Idea Fusion types
+export interface FusedIdea {
+  id: string;
+  title: string;
+  description: string;
+  concept: string;
+  sourceIdeas: Idea[];
+  sourceIdeaIds: string[];
+  voteCount: number;
+  userVote?: number;
+  createdAt: Date;
+  createdById?: string;
+  createdBy?: User;
+}

@@ -238,6 +238,61 @@ export type Database = {
           tag_id?: string;
         };
       };
+      fused_ideas: {
+        Row: {
+          id: string;
+          title: string;
+          description: string;
+          concept: string;
+          source_idea_ids: string[];
+          vote_count: number;
+          created_by_id: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          title: string;
+          description: string;
+          concept: string;
+          source_idea_ids: string[];
+          vote_count?: number;
+          created_by_id?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          title?: string;
+          description?: string;
+          concept?: string;
+          source_idea_ids?: string[];
+          vote_count?: number;
+          created_by_id?: string | null;
+          created_at?: string;
+        };
+      };
+      fused_idea_votes: {
+        Row: {
+          id: string;
+          fused_idea_id: string;
+          user_id: string;
+          value: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          fused_idea_id: string;
+          user_id: string;
+          value: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          fused_idea_id?: string;
+          user_id?: string;
+          value?: number;
+          created_at?: string;
+        };
+      };
     };
   };
 };

@@ -231,6 +231,19 @@ export const translations = {
       serverError: 'Server Error',
     },
 
+    // AI Fusion
+    fusion: {
+      title: 'AI Idea Fusion',
+      subtitle: 'Combine random ideas to create breakthrough concepts',
+      generateNew: 'Generate Fusion',
+      generating: 'Fusing ideas...',
+      sourceIdeas: 'Source Ideas',
+      fusedConcept: 'Fused Concept',
+      voteForFusion: 'Vote if this fusion inspires you',
+      noFusions: 'No fusions yet. Generate the first one!',
+      tryAgain: 'Try Another Fusion',
+    },
+
     // Terms of Service
     terms: {
       title: 'Terms of Service',
@@ -456,6 +469,19 @@ export const translations = {
       goHome: 'Về trang chủ',
       accessDenied: 'Truy cập bị từ chối',
       serverError: 'Lỗi máy chủ',
+    },
+
+    // AI Fusion
+    fusion: {
+      title: 'AI Ý tưởng Fusion',
+      subtitle: 'Kết hợp các ý tưởng ngẫu nhiên để tạo ra concept đột phá',
+      generateNew: 'Tạo Fusion mới',
+      generating: 'Đang kết hợp ý tưởng...',
+      sourceIdeas: 'Ý tưởng nguồn',
+      fusedConcept: 'Concept kết hợp',
+      voteForFusion: 'Vote nếu fusion này truyền cảm hứng cho bạn',
+      noFusions: 'Chưa có fusion nào. Hãy tạo cái đầu tiên!',
+      tryAgain: 'Thử Fusion khác',
     },
 
     // Terms of Service
