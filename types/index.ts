@@ -126,3 +126,24 @@ export interface FusedIdea {
   createdById?: string;
   createdBy?: User;
 }
+
+// Idea Battle Arena types
+export type BattleStatus = 'active' | 'completed' | 'cancelled';
+
+export interface Battle {
+  id: string;
+  idea1Id: string;
+  idea2Id: string;
+  idea1?: Idea;
+  idea2?: Idea;
+  idea1Votes: number;
+  idea2Votes: number;
+  winnerId?: string;
+  winner?: Idea;
+  status: BattleStatus;
+  round: number;
+  weekNumber: number;
+  expiresAt: Date;
+  createdAt: Date;
+  userVote?: string; // id of idea user voted for
+}

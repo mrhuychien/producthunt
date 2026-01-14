@@ -244,6 +244,28 @@ export const translations = {
       tryAgain: 'Try Another Fusion',
     },
 
+    // Battle Arena
+    battle: {
+      title: 'Idea Battle Arena',
+      subtitle: 'Vote for your favorite idea in head-to-head battles',
+      activeBattles: 'Active Battles',
+      completedBattles: 'Completed Battles',
+      noBattles: 'No active battles right now. Check back later!',
+      championTitle: 'Weekly Champion',
+      championDesc: 'The idea with the most wins this week',
+      noChampion: 'No champion yet this week',
+      round: 'Round',
+      week: 'Week',
+      timeLeft: 'left',
+      ended: 'Ended',
+      totalVotes: 'total votes',
+      youVoted: 'You voted',
+      voteNow: 'Vote now!',
+      winner: 'Winner',
+      startBattle: 'Start New Battle',
+      startingBattle: 'Creating battle...',
+    },
+
     // Terms of Service
     terms: {
       title: 'Terms of Service',
@@ -482,6 +504,28 @@ export const translations = {
       voteForFusion: 'Vote nếu fusion này truyền cảm hứng cho bạn',
       noFusions: 'Chưa có fusion nào. Hãy tạo cái đầu tiên!',
       tryAgain: 'Thử Fusion khác',
+    },
+
+    // Battle Arena
+    battle: {
+      title: 'Đấu trường Ý tưởng',
+      subtitle: 'Bình chọn cho ý tưởng yêu thích trong các trận đấu 1v1',
+      activeBattles: 'Trận đấu đang diễn ra',
+      completedBattles: 'Trận đấu đã kết thúc',
+      noBattles: 'Hiện không có trận đấu nào. Quay lại sau nhé!',
+      championTitle: 'Nhà vô địch tuần',
+      championDesc: 'Ý tưởng chiến thắng nhiều nhất tuần này',
+      noChampion: 'Chưa có nhà vô địch tuần này',
+      round: 'Vòng',
+      week: 'Tuần',
+      timeLeft: 'còn lại',
+      ended: 'Đã kết thúc',
+      totalVotes: 'tổng lượt vote',
+      youVoted: 'Bạn đã vote',
+      voteNow: 'Vote ngay!',
+      winner: 'Người thắng',
+      startBattle: 'Bắt đầu trận mới',
+      startingBattle: 'Đang tạo trận đấu...',
     },
 
     // Terms of Service

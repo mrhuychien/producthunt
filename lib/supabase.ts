@@ -293,6 +293,70 @@ export type Database = {
           created_at?: string;
         };
       };
+      battles: {
+        Row: {
+          id: string;
+          idea1_id: string;
+          idea2_id: string;
+          idea1_votes: number;
+          idea2_votes: number;
+          winner_id: string | null;
+          status: 'active' | 'completed' | 'cancelled';
+          round: number;
+          week_number: number;
+          expires_at: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          idea1_id: string;
+          idea2_id: string;
+          idea1_votes?: number;
+          idea2_votes?: number;
+          winner_id?: string | null;
+          status?: 'active' | 'completed' | 'cancelled';
+          round?: number;
+          week_number: number;
+          expires_at: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          idea1_id?: string;
+          idea2_id?: string;
+          idea1_votes?: number;
+          idea2_votes?: number;
+          winner_id?: string | null;
+          status?: 'active' | 'completed' | 'cancelled';
+          round?: number;
+          week_number?: number;
+          expires_at?: string;
+          created_at?: string;
+        };
+      };
+      battle_votes: {
+        Row: {
+          id: string;
+          battle_id: string;
+          user_id: string;
+          voted_idea_id: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          battle_id: string;
+          user_id: string;
+          voted_idea_id: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          battle_id?: string;
+          user_id?: string;
+          voted_idea_id?: string;
+          created_at?: string;
+        };
+      };
     };
   };
 };

@@ -22,6 +22,7 @@ export function Header() {
   const navLinks = [
     { href: '/ideas', label: t.nav.browseIdeas },
     { href: '/fusion', label: '🧬 Fusion' },
+    { href: '/battle', label: '⚔️ Battle' },
     { href: '/submit', label: t.nav.submitIdea },
     { href: '/about', label: t.footer.about },
   ];
