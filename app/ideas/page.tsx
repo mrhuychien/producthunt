@@ -79,26 +79,20 @@ export default function IdeasPage() {
   };
 
   const handleVote = async (ideaId: string) => {
-    console.log('handleVote called for ideaId:', ideaId);
     if (!session) {
-      console.log('No session, redirecting to login');
       window.location.href = '/login';
       return;
     }
 
     try {
-      console.log('Sending vote request...');
       const res = await fetch('/api/votes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ideaId }),
       });
 
-      const data = await res.json();
-      console.log('Vote response:', res.status, data);
-
-      if (res.ok && data.data) {
-        // Update local state
+      if (res.ok) {
+        const data = await res.json();
         setIdeas(ideas.map(idea => {
           if (idea.id === ideaId) {
             return {
@@ -109,11 +103,9 @@ export default function IdeasPage() {
           }
           return idea;
         }));
-      } else {
-        console.error('Vote failed:', data.error);
       }
     } catch (err) {
-      console.error('Vote error:', err);
+      // Silent fail
     }
   };
 

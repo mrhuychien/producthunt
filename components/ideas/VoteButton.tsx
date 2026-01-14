@@ -42,7 +42,6 @@ export function VoteButton({
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log('VoteButton clicked, disabled:', disabled);
     if (!disabled && onVote) {
       onVote();
     }
@@ -59,8 +58,8 @@ export function VoteButton({
         'flex items-center rounded-lg border transition-all',
         styles.container,
         hasVoted
-          ? 'bg-[var(--primary)]/10 border-[var(--primary)] text-[var(--primary)]'
-          : 'bg-gray-50 border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--primary)] hover:text-[var(--primary)]',
+          ? 'bg-green-50 border-green-500 text-green-600'
+          : 'bg-gray-50 border-[var(--border)] text-[var(--text-secondary)] hover:border-green-400 hover:text-green-500',
         disabled && 'cursor-not-allowed opacity-50'
       )}
     >
