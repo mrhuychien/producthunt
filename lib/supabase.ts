@@ -427,6 +427,32 @@ export type Database = {
           created_at?: string;
         };
       };
+      idea_interests: {
+        Row: {
+          id: string;
+          idea_id: string;
+          user_id: string;
+          status: 'interested' | 'building' | 'abandoned';
+          note: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          idea_id: string;
+          user_id: string;
+          status?: 'interested' | 'building' | 'abandoned';
+          note?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          idea_id?: string;
+          user_id?: string;
+          status?: 'interested' | 'building' | 'abandoned';
+          note?: string | null;
+          created_at?: string;
+        };
+      };
     };
   };
 };

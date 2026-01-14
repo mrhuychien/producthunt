@@ -179,3 +179,16 @@ export interface ProgressUpdate {
   milestoneTitle?: string;
   createdAt: Date;
 }
+
+// "Steal This Idea" Mode types
+export type IdeaInterestStatus = 'interested' | 'building' | 'abandoned';
+
+export interface IdeaInterest {
+  id: string;
+  ideaId: string;
+  userId: string;
+  user?: User;
+  status: IdeaInterestStatus;
+  note?: string;
+  createdAt: Date;
+}
