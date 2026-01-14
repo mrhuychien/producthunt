@@ -147,3 +147,35 @@ export interface Battle {
   createdAt: Date;
   userVote?: string; // id of idea user voted for
 }
+
+// Build Progress Live Stream types
+export type BuildClaimStatus = 'active' | 'completed' | 'abandoned';
+export type ProgressUpdateType = 'text' | 'image' | 'commit' | 'milestone';
+
+export interface BuildClaim {
+  id: string;
+  ideaId: string;
+  idea?: Idea;
+  builderId: string;
+  builder?: User;
+  status: BuildClaimStatus;
+  startedAt: Date;
+  completedAt?: Date;
+  githubUrl?: string;
+  liveUrl?: string;
+  createdAt: Date;
+  progressUpdates?: ProgressUpdate[];
+}
+
+export interface ProgressUpdate {
+  id: string;
+  claimId: string;
+  userId: string;
+  user?: User;
+  type: ProgressUpdateType;
+  content: string;
+  imageUrl?: string;
+  commitUrl?: string;
+  milestoneTitle?: string;
+  createdAt: Date;
+}

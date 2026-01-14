@@ -266,6 +266,39 @@ export const translations = {
       startingBattle: 'Creating battle...',
     },
 
+    // Build Progress Live Stream
+    buildProgress: {
+      title: 'Build Progress',
+      subtitle: 'Follow the journey from idea to product',
+      claimButton: 'Claim & Start Building',
+      claimed: 'Being Built',
+      building: 'You are building this',
+      noClaim: 'No one has claimed this idea yet',
+      beFirst: 'Be the first to turn this idea into reality!',
+      startedBy: 'Started by',
+      startedAt: 'Started',
+      completedAt: 'Completed',
+      status: {
+        active: 'In Development',
+        completed: 'Completed',
+        abandoned: 'Abandoned',
+      },
+      updateTypes: {
+        text: 'Update',
+        image: 'Screenshot',
+        commit: 'Commit',
+        milestone: 'Milestone',
+      },
+      addUpdate: 'Add Progress Update',
+      noUpdates: 'No updates yet',
+      postUpdate: 'Post Update',
+      posting: 'Posting...',
+      githubLink: 'GitHub',
+      liveDemo: 'Live Demo',
+      markComplete: 'Mark as Complete',
+      abandon: 'Abandon Project',
+    },
+
     // Terms of Service
     terms: {
       title: 'Terms of Service',
@@ -526,6 +559,39 @@ export const translations = {
       winner: 'Người thắng',
       startBattle: 'Bắt đầu trận mới',
       startingBattle: 'Đang tạo trận đấu...',
+    },
+
+    // Build Progress Live Stream
+    buildProgress: {
+      title: 'Tiến độ Phát triển',
+      subtitle: 'Theo dõi hành trình từ ý tưởng đến sản phẩm',
+      claimButton: 'Claim & Bắt đầu Build',
+      claimed: 'Đang được phát triển',
+      building: 'Bạn đang phát triển idea này',
+      noClaim: 'Chưa có ai claim idea này',
+      beFirst: 'Hãy là người đầu tiên biến ý tưởng này thành hiện thực!',
+      startedBy: 'Bắt đầu bởi',
+      startedAt: 'Bắt đầu',
+      completedAt: 'Hoàn thành',
+      status: {
+        active: 'Đang phát triển',
+        completed: 'Hoàn thành',
+        abandoned: 'Đã bỏ',
+      },
+      updateTypes: {
+        text: 'Cập nhật',
+        image: 'Screenshot',
+        commit: 'Commit',
+        milestone: 'Milestone',
+      },
+      addUpdate: 'Thêm cập nhật tiến độ',
+      noUpdates: 'Chưa có cập nhật nào',
+      postUpdate: 'Đăng cập nhật',
+      posting: 'Đang đăng...',
+      githubLink: 'GitHub',
+      liveDemo: 'Live Demo',
+      markComplete: 'Đánh dấu hoàn thành',
+      abandon: 'Bỏ dự án',
     },
 
     // Terms of Service

@@ -357,6 +357,76 @@ export type Database = {
           created_at?: string;
         };
       };
+      build_claims: {
+        Row: {
+          id: string;
+          idea_id: string;
+          builder_id: string;
+          status: 'active' | 'completed' | 'abandoned';
+          started_at: string;
+          completed_at: string | null;
+          github_url: string | null;
+          live_url: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          idea_id: string;
+          builder_id: string;
+          status?: 'active' | 'completed' | 'abandoned';
+          started_at?: string;
+          completed_at?: string | null;
+          github_url?: string | null;
+          live_url?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          idea_id?: string;
+          builder_id?: string;
+          status?: 'active' | 'completed' | 'abandoned';
+          started_at?: string;
+          completed_at?: string | null;
+          github_url?: string | null;
+          live_url?: string | null;
+          created_at?: string;
+        };
+      };
+      progress_updates: {
+        Row: {
+          id: string;
+          claim_id: string;
+          user_id: string;
+          type: 'text' | 'image' | 'commit' | 'milestone';
+          content: string;
+          image_url: string | null;
+          commit_url: string | null;
+          milestone_title: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          claim_id: string;
+          user_id: string;
+          type: 'text' | 'image' | 'commit' | 'milestone';
+          content: string;
+          image_url?: string | null;
+          commit_url?: string | null;
+          milestone_title?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          claim_id?: string;
+          user_id?: string;
+          type?: 'text' | 'image' | 'commit' | 'milestone';
+          content?: string;
+          image_url?: string | null;
+          commit_url?: string | null;
+          milestone_title?: string | null;
+          created_at?: string;
+        };
+      };
     };
   };
 };
