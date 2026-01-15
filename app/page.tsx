@@ -11,6 +11,10 @@ import {
   Target,
   CheckCircle,
   TrendingUp,
+  Swords,
+  Dna,
+  Rocket,
+  DollarSign,
 } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -180,6 +184,118 @@ export default function Home() {
                     {t.landing.step3Desc}
                   </p>
                 </Card>
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* New Features Section */}
+        <section className="py-20 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
+              <Badge variant="primary" className="mb-4">🚀 Tính năng mới</Badge>
+              <h2 className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)]">
+                Khám phá các công cụ độc đáo
+              </h2>
+              <p className="mt-4 text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
+                Biến ý tưởng thành sản phẩm với những tính năng AI thông minh
+              </p>
+            </motion.div>
+
+            <motion.div
+              variants={stagger}
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true }}
+              className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
+            >
+              {/* Battle Arena */}
+              <motion.div variants={fadeInUp}>
+                <Link href="/battle">
+                  <Card hover className="p-6 h-full bg-gradient-to-br from-orange-50 to-red-50 border-orange-200 group">
+                    <div className="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <Swords className="w-7 h-7 text-orange-600" />
+                    </div>
+                    <h3 className="text-lg font-bold text-[var(--text-primary)] mb-2">
+                      ⚔️ Đấu trường Ý tưởng
+                    </h3>
+                    <p className="text-sm text-[var(--text-secondary)]">
+                      Ý tưởng head-to-head, vote để tìm ra nhà vô địch tuần!
+                    </p>
+                    <div className="mt-4 flex items-center gap-2 text-orange-600 text-sm font-medium">
+                      <span>Tham gia ngay</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </Card>
+                </Link>
+              </motion.div>
+
+              {/* AI Fusion */}
+              <motion.div variants={fadeInUp}>
+                <Link href="/fusion">
+                  <Card hover className="p-6 h-full bg-gradient-to-br from-purple-50 to-indigo-50 border-purple-200 group">
+                    <div className="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <Dna className="w-7 h-7 text-purple-600" />
+                    </div>
+                    <h3 className="text-lg font-bold text-[var(--text-primary)] mb-2">
+                      🧬 AI Fusion Lab
+                    </h3>
+                    <p className="text-sm text-[var(--text-secondary)]">
+                      Kết hợp 2 ý tưởng bằng AI để tạo ra sản phẩm đột phá!
+                    </p>
+                    <div className="mt-4 flex items-center gap-2 text-purple-600 text-sm font-medium">
+                      <span>Thử fusion</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </Card>
+                </Link>
+              </motion.div>
+
+              {/* Build Progress */}
+              <motion.div variants={fadeInUp}>
+                <Link href="/ideas">
+                  <Card hover className="p-6 h-full bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 group">
+                    <div className="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <Rocket className="w-7 h-7 text-green-600" />
+                    </div>
+                    <h3 className="text-lg font-bold text-[var(--text-primary)] mb-2">
+                      📺 Build Progress
+                    </h3>
+                    <p className="text-sm text-[var(--text-secondary)]">
+                      Theo dõi real-time tiến độ xây dựng sản phẩm từ ý tưởng!
+                    </p>
+                    <div className="mt-4 flex items-center gap-2 text-green-600 text-sm font-medium">
+                      <span>Xem tiến độ</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </Card>
+                </Link>
+              </motion.div>
+
+              {/* Micro-Bounty */}
+              <motion.div variants={fadeInUp}>
+                <Link href="/ideas">
+                  <Card hover className="p-6 h-full bg-gradient-to-br from-yellow-50 to-amber-50 border-yellow-200 group">
+                    <div className="w-14 h-14 bg-yellow-100 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <DollarSign className="w-7 h-7 text-yellow-600" />
+                    </div>
+                    <h3 className="text-lg font-bold text-[var(--text-primary)] mb-2">
+                      💰 Micro-Bounty
+                    </h3>
+                    <p className="text-sm text-[var(--text-secondary)]">
+                      Pledge tiền thưởng cho ý tưởng yêu thích để khuyến khích builder!
+                    </p>
+                    <div className="mt-4 flex items-center gap-2 text-yellow-600 text-sm font-medium">
+                      <span>Pledge ngay</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </Card>
+                </Link>
               </motion.div>
             </motion.div>
           </div>

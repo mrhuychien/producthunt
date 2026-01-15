@@ -151,12 +151,24 @@ export async function POST(request: NextRequest) {
       battleedIds.add(b.idea2_id);
     });
 
-    const { data: availableIdeas, error: ideasError } = await supabase
+    // Get ideas for battle - prefer approved but allow all if not enough
+    let { data: availableIdeas, error: ideasError } = await supabase
       .from('ideas')
       .select('id')
       .eq('status', 'approved')
       .order('vote_count', { ascending: false })
       .limit(20);
+
+    // If not enough approved ideas, get any ideas
+    if (!availableIdeas || availableIdeas.length < 2) {
+      const result = await supabase
+        .from('ideas')
+        .select('id')
+        .order('vote_count', { ascending: false })
+        .limit(20);
+      availableIdeas = result.data;
+      ideasError = result.error;
+    }
 
     if (ideasError || !availableIdeas || availableIdeas.length < 2) {
       return errorResponse('Không đủ ý tưởng để tạo battle', 400);
