@@ -13,6 +13,8 @@ import {
   Share2,
   Flag,
   Send,
+  Rocket,
+  Loader2,
 } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -21,9 +23,13 @@ import { IdeaCardSkeleton } from '@/components/ui/Skeleton';
 import { ErrorMessage } from '@/components/ui/ErrorMessage';
 import { VoteButton } from '@/components/ideas/VoteButton';
 import { UserAvatar } from '@/components/shared/UserAvatar';
+import { BountyCard } from '@/components/bounty/BountyCard';
+import { StealButton } from '@/components/steal/StealButton';
+import { DifficultyRating } from '@/components/difficulty/DifficultyRating';
+import { ProgressTimeline } from '@/components/build-progress/ProgressTimeline';
 import { formatRelativeTime, getStatusColor, getStatusLabel } from '@/lib/utils';
 import { useLanguage } from '@/lib/i18n';
-import type { Idea, Comment } from '@/types';
+import type { Idea, Comment, BuildClaim, ProgressUpdate } from '@/types';
 
 export default function IdeaDetailPage() {
   const params = useParams();
@@ -35,6 +41,9 @@ export default function IdeaDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [newComment, setNewComment] = useState('');
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
+  const [buildClaim, setBuildClaim] = useState<BuildClaim | null>(null);
+  const [progressUpdates, setProgressUpdates] = useState<ProgressUpdate[]>([]);
+  const [isClaiming, setIsClaiming] = useState(false);
 
   const ideaId = params?.id as string;
 
@@ -87,6 +96,67 @@ export default function IdeaDetailPage() {
       fetchComments();
     }
   }, [ideaId, idea]);
+
+  // Fetch build claim and progress
+  useEffect(() => {
+    const fetchBuildProgress = async () => {
+      if (!ideaId) return;
+
+      try {
+        // Fetch claim info
+        const claimRes = await fetch(`/api/ideas/${ideaId}/claim`);
+        if (claimRes.ok) {
+          const claimData = await claimRes.json();
+          if (claimData.success && claimData.data) {
+            setBuildClaim(claimData.data);
+          }
+        }
+
+        // Fetch progress updates
+        const progressRes = await fetch(`/api/ideas/${ideaId}/progress`);
+        if (progressRes.ok) {
+          const progressData = await progressRes.json();
+          if (progressData.success) {
+            setProgressUpdates(progressData.data || []);
+          }
+        }
+      } catch (err) {
+        // Silent fail
+      }
+    };
+
+    if (idea) {
+      fetchBuildProgress();
+    }
+  }, [ideaId, idea]);
+
+  const handleClaimIdea = async () => {
+    if (!session) {
+      window.location.href = '/login';
+      return;
+    }
+    if (!idea) return;
+
+    setIsClaiming(true);
+    try {
+      const res = await fetch(`/api/ideas/${idea.id}/claim`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({}),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          setBuildClaim(data.data);
+        }
+      }
+    } catch (err) {
+      // Silent fail
+    } finally {
+      setIsClaiming(false);
+    }
+  };
 
   const handleVote = async () => {
     if (!session) {
@@ -237,7 +307,7 @@ export default function IdeaDetailPage() {
     <div className="min-h-screen bg-[var(--background)]">
       <Header />
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back Button */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
@@ -252,6 +322,11 @@ export default function IdeaDetailPage() {
             {t.ideaDetail.backToIdeas}
           </Link>
         </motion.div>
+
+        {/* Two Column Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Content - 2 columns */}
+          <div className="lg:col-span-2 space-y-8">
 
         {/* Main Content */}
         <motion.div
@@ -462,6 +537,75 @@ export default function IdeaDetailPage() {
             </div>
           </Card>
         </motion.div>
+
+          </div>
+
+          {/* Sidebar - 1 column */}
+          <div className="space-y-6">
+            {/* Steal This Idea */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              <Card className="p-5">
+                <h3 className="font-bold text-[var(--text-primary)] mb-4 flex items-center gap-2">
+                  🥷 Steal This Idea
+                </h3>
+                <StealButton ideaId={ideaId} />
+              </Card>
+            </motion.div>
+
+            {/* AI Difficulty Rating */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <DifficultyRating ideaId={ideaId} />
+            </motion.div>
+
+            {/* Micro-Bounty */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <BountyCard ideaId={ideaId} />
+            </motion.div>
+
+            {/* Build Progress */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <Card className="p-5">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-bold text-[var(--text-primary)] flex items-center gap-2">
+                    <Rocket className="w-5 h-5 text-green-500" />
+                    Build Progress
+                  </h3>
+                  {!buildClaim && session && (
+                    <Button
+                      size="sm"
+                      onClick={handleClaimIdea}
+                      disabled={isClaiming}
+                      className="bg-green-500 hover:bg-green-600 text-white"
+                    >
+                      {isClaiming ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        'Claim & Build'
+                      )}
+                    </Button>
+                  )}
+                </div>
+                <ProgressTimeline claim={buildClaim} updates={progressUpdates} />
+              </Card>
+            </motion.div>
+          </div>
+        </div>
       </main>
 
       <Footer />
