@@ -626,6 +626,7 @@ export async function GET(request: NextRequest) {
     }
 
     return successResponse({
+      success: true,
       message: `Đã tạo ${createdIdeas?.length || 0} ý tưởng mới`,
       ideas: createdIdeas?.map((i: { id: string; title: string }) => ({ id: i.id, title: i.title })),
       generatedBy: MR_IDEA_USER.name,
