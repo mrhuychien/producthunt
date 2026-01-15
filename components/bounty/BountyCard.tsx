@@ -3,13 +3,13 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  DollarSign,
   Users,
   Loader2,
   Plus,
   X,
   Gift,
-  TrendingUp
+  TrendingUp,
+  Banknote
 } from 'lucide-react';
 import { Card, Button, Input, Badge } from '@/components/ui';
 import { cn } from '@/lib/utils';
@@ -31,12 +31,11 @@ interface BountyCardProps {
 }
 
 function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'decimal',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  }).format(amount);
+  }).format(amount) + '₫';
 }
 
 export function BountyCard({ ideaId, compact = false }: BountyCardProps) {
@@ -81,8 +80,8 @@ export function BountyCard({ ideaId, compact = false }: BountyCardProps) {
     }
 
     const amount = parseInt(pledgeAmount);
-    if (!amount || amount < 1) {
-      alert('Vui lòng nhập số tiền từ $1 trở lên');
+    if (!amount || amount < 10000) {
+      alert('Vui lòng nhập số tiền từ 10.000₫ trở lên');
       return;
     }
 
@@ -150,11 +149,11 @@ export function BountyCard({ ideaId, compact = false }: BountyCardProps) {
     return (
       <div className="flex items-center gap-2">
         <div className="flex items-center gap-1 px-2.5 py-1.5 bg-green-50 rounded-lg">
-          <DollarSign className="w-4 h-4 text-green-600" />
+          <Banknote className="w-4 h-4 text-green-600" />
           <span className="font-bold text-green-600">{formatCurrency(total)}</span>
         </div>
         {count > 0 && (
-          <span className="text-xs text-gray-500">{count} backers</span>
+          <span className="text-xs text-gray-500">{count} người hỗ trợ</span>
         )}
       </div>
     );
@@ -241,20 +240,22 @@ export function BountyCard({ ideaId, compact = false }: BountyCardProps) {
         >
           <div>
             <label className="text-sm font-medium text-[var(--text-primary)]">
-              Số tiền (USD)
+              Số tiền (VND)
             </label>
             <div className="relative mt-1">
-              <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-medium">₫</span>
               <Input
                 type="number"
-                min="1"
-                max="10000"
-                placeholder="10"
+                min="10000"
+                max="100000000"
+                step="10000"
+                placeholder="50000"
                 value={pledgeAmount}
                 onChange={(e) => setPledgeAmount(e.target.value)}
-                className="pl-9"
+                className="pl-8"
               />
             </div>
+            <p className="text-xs text-gray-500 mt-1">Tối thiểu 10.000₫</p>
           </div>
           <div>
             <label className="text-sm font-medium text-[var(--text-primary)]">

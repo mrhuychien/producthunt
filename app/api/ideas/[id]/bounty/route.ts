@@ -58,11 +58,12 @@ export async function GET(
     });
 
     return successResponse({
+      success: true,
       data: {
         bounties: transformedBounties,
         total,
         count: transformedBounties.length,
-        currency: 'USD',
+        currency: 'VND',
         userBounty,
       },
     });
@@ -83,14 +84,14 @@ export async function POST(
 
     const { id: ideaId } = await params;
     const body = await request.json();
-    const { amount, message, currency = 'USD' } = body;
+    const { amount, message, currency = 'VND' } = body;
 
-    if (!amount || amount < 1) {
-      return errorResponse('Số tiền phải từ $1 trở lên', 400);
+    if (!amount || amount < 10000) {
+      return errorResponse('Số tiền phải từ 10.000₫ trở lên', 400);
     }
 
-    if (amount > 10000) {
-      return errorResponse('Số tiền tối đa là $10,000', 400);
+    if (amount > 100000000) {
+      return errorResponse('Số tiền tối đa là 100.000.000₫', 400);
     }
 
     const supabase = createServerClient();
@@ -144,6 +145,7 @@ export async function POST(
 
       const transformed = transformToCamelCase<Record<string, unknown>>(updated);
       return successResponse({
+        success: true,
         data: {
           bounty: transformed,
           total,
@@ -182,11 +184,12 @@ export async function POST(
 
     const transformed = transformToCamelCase<Record<string, unknown>>(bounty);
     return successResponse({
+      success: true,
       data: {
         bounty: transformed,
         total,
       },
-      message: `Đã pledge $${amount}! Cảm ơn bạn đã hỗ trợ idea này.`,
+      message: `Đã pledge ${amount.toLocaleString('vi-VN')}₫! Cảm ơn bạn đã hỗ trợ idea này.`,
     }, 201);
   } catch (error) {
     console.error('Error in POST /api/ideas/[id]/bounty:', error);
@@ -240,6 +243,7 @@ export async function DELETE(
     const total = (allBounties || []).reduce((sum, b) => sum + b.amount, 0);
 
     return successResponse({
+      success: true,
       data: { total },
       message: 'Đã hủy pledge bounty',
     });

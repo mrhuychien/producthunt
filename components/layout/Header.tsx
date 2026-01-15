@@ -24,6 +24,7 @@ export function Header() {
     { href: '/ideas', label: t.nav.browseIdeas },
     { href: '/fusion', label: '🧬 Fusion' },
     { href: '/battle', label: '⚔️ Battle' },
+    { href: '/bounty', label: '💰 Bounty' },
     { href: '/about', label: t.footer.about },
   ];
 
