@@ -139,11 +139,44 @@ export async function POST(request: NextRequest) {
     const supabase = createServerClient();
     const weekNumber = getWeekNumber();
 
-    // Get random approved ideas that haven't battled this week
-    const { data: existingBattles } = await supabase
+    // First, check if ideas table has any data
+    const { data: ideaCount, error: countError } = await supabase
+      .from('ideas')
+      .select('id', { count: 'exact', head: true });
+
+    if (countError) {
+      console.error('Error checking ideas:', countError);
+      return errorResponse(`Lỗi kiểm tra ý tưởng: ${countError.message}`, 500);
+    }
+
+    // Get total ideas count
+    const { count: totalIdeas } = await supabase
+      .from('ideas')
+      .select('*', { count: 'exact', head: true });
+
+    if (!totalIdeas || totalIdeas < 2) {
+      return errorResponse(`Cần ít nhất 2 ý tưởng để tạo battle. Hiện có: ${totalIdeas || 0}`, 400);
+    }
+
+    // Check if battles table exists by trying to query it
+    const { error: battlesTableError } = await supabase
+      .from('battles')
+      .select('id', { count: 'exact', head: true });
+
+    if (battlesTableError) {
+      console.error('Battles table error:', battlesTableError);
+      return errorResponse(`Bảng battles chưa được tạo. Vui lòng chạy migration SQL.`, 500);
+    }
+
+    // Get existing battles this week
+    const { data: existingBattles, error: existingError } = await supabase
       .from('battles')
       .select('idea1_id, idea2_id')
       .eq('week_number', weekNumber);
+
+    if (existingError) {
+      console.error('Error fetching existing battles:', existingError);
+    }
 
     const battleedIds = new Set<string>();
     existingBattles?.forEach(b => {
@@ -170,15 +203,20 @@ export async function POST(request: NextRequest) {
       ideasError = result.error;
     }
 
-    if (ideasError || !availableIdeas || availableIdeas.length < 2) {
-      return errorResponse('Không đủ ý tưởng để tạo battle', 400);
+    if (ideasError) {
+      console.error('Error fetching ideas:', ideasError);
+      return errorResponse(`Lỗi lấy danh sách ý tưởng: ${ideasError.message}`, 500);
+    }
+
+    if (!availableIdeas || availableIdeas.length < 2) {
+      return errorResponse(`Không đủ ý tưởng để tạo battle. Tìm thấy: ${availableIdeas?.length || 0}`, 400);
     }
 
     // Filter out already battled ideas
     const freshIdeas = availableIdeas.filter(i => !battleedIds.has(i.id));
 
     if (freshIdeas.length < 2) {
-      return errorResponse('Tất cả ý tưởng đã battle tuần này', 400);
+      return errorResponse(`Tất cả ${availableIdeas.length} ý tưởng đã battle tuần này. Chờ tuần sau hoặc thêm ý tưởng mới.`, 400);
     }
 
     // Pick 2 random ideas
@@ -206,7 +244,7 @@ export async function POST(request: NextRequest) {
 
     if (battleError) {
       console.error('Error creating battle:', battleError);
-      return errorResponse('Không thể tạo battle', 500);
+      return errorResponse(`Không thể tạo battle: ${battleError.message}`, 500);
     }
 
     // Get full idea data
@@ -230,6 +268,6 @@ export async function POST(request: NextRequest) {
     }, 201);
   } catch (error) {
     console.error('Error in POST /api/battles:', error);
-    return errorResponse('Internal server error', 500);
+    return errorResponse(`Internal server error: ${error instanceof Error ? error.message : 'Unknown'}`, 500);
   }
 }

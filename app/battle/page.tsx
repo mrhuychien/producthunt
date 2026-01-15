@@ -22,6 +22,7 @@ export default function BattlePage() {
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [votingBattleId, setVotingBattleId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchBattles();
@@ -45,11 +46,12 @@ export default function BattlePage() {
 
   const handleCreateBattle = async () => {
     if (!session) {
-      alert('Vui lòng đăng nhập để tạo trận đấu');
+      setError('Vui lòng đăng nhập để tạo trận đấu');
       return;
     }
 
     setCreating(true);
+    setError(null);
     try {
       const response = await fetch('/api/battles', {
         method: 'POST',
@@ -60,11 +62,11 @@ export default function BattlePage() {
       if (data.success) {
         fetchBattles();
       } else {
-        alert(data.error || 'Không thể tạo trận đấu');
+        setError(data.error || 'Không thể tạo trận đấu');
       }
-    } catch (error) {
-      console.error('Error creating battle:', error);
-      alert('Không thể tạo trận đấu');
+    } catch (err) {
+      console.error('Error creating battle:', err);
+      setError('Không thể kết nối server');
     } finally {
       setCreating(false);
     }
@@ -175,7 +177,7 @@ export default function BattlePage() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex justify-center mb-8"
+            className="flex flex-col items-center gap-3 mb-8"
           >
             <Button
               onClick={handleCreateBattle}
@@ -194,6 +196,15 @@ export default function BattlePage() {
                 </>
               )}
             </Button>
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="px-4 py-2 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm max-w-md text-center"
+              >
+                {error}
+              </motion.div>
+            )}
           </motion.div>
         )}
 
