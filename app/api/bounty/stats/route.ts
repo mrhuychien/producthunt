@@ -38,6 +38,10 @@ export async function GET() {
     for (const bounty of bounties || []) {
       if (!bounty.idea) continue;
 
+      // Supabase returns single relation as array, get first element
+      const ideaData = Array.isArray(bounty.idea) ? bounty.idea[0] : bounty.idea;
+      if (!ideaData) continue;
+
       const existing = ideaBountyMap.get(bounty.idea_id);
       if (existing) {
         existing.total += bounty.amount;
@@ -46,7 +50,7 @@ export async function GET() {
         ideaBountyMap.set(bounty.idea_id, {
           total: bounty.amount,
           backers: new Set([bounty.user_id]),
-          idea: bounty.idea as Record<string, unknown>,
+          idea: ideaData as unknown as Record<string, unknown>,
         });
       }
     }
