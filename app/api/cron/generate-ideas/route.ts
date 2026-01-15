@@ -491,11 +491,15 @@ export async function GET(request: NextRequest) {
     const supabase = createServerClient();
 
     // 1. Find or create Mr Idea user
-    let { data: mrIdea } = await supabase
+    let { data: mrIdea, error: mrIdeaError } = await supabase
       .from('users')
       .select('id')
       .eq('email', MR_IDEA_USER.email)
       .single();
+
+    if (mrIdeaError && mrIdeaError.code !== 'PGRST116') {
+      console.error('Error fetching Mr Idea user:', mrIdeaError);
+    }
 
     if (!mrIdea) {
       const { data: newUser, error: createError } = await supabase
@@ -511,7 +515,7 @@ export async function GET(request: NextRequest) {
 
       if (createError) {
         console.error('Error creating Mr Idea user:', createError);
-        return errorResponse('Failed to create Mr Idea user', 500);
+        return errorResponse(`Không thể tạo user Mr Idea: ${createError.message}`, 500);
       }
       mrIdea = newUser;
     }
@@ -519,10 +523,15 @@ export async function GET(request: NextRequest) {
     // 2. Get all categories
     const { data: categories, error: catError } = await supabase
       .from('categories')
-      .select('id, slug');
+      .select('id, slug, name');
 
-    if (catError || !categories || categories.length === 0) {
-      return errorResponse('No categories found', 500);
+    if (catError) {
+      console.error('Error fetching categories:', catError);
+      return errorResponse(`Lỗi lấy categories: ${catError.message}`, 500);
+    }
+
+    if (!categories || categories.length === 0) {
+      return errorResponse('Chưa có categories. Vui lòng chạy seed data trước.', 500);
     }
 
     // Create category map
@@ -530,6 +539,37 @@ export async function GET(request: NextRequest) {
     categories.forEach((cat: { id: string; slug: string }) => {
       categoryMap[cat.slug] = cat.id;
     });
+
+    // Check which categories are available
+    const requiredCategories = ['tools', 'apps', 'games', 'business', 'design', 'education'];
+    const missingCategories = requiredCategories.filter(slug => !categoryMap[slug]);
+
+    if (missingCategories.length > 0) {
+      // Try to create missing categories
+      const categoryDefaults: Record<string, { name: string; icon: string; color: string }> = {
+        tools: { name: 'Công cụ', icon: '🔧', color: '#3B82F6' },
+        apps: { name: 'Ứng dụng', icon: '📱', color: '#10B981' },
+        games: { name: 'Trò chơi', icon: '🎮', color: '#8B5CF6' },
+        business: { name: 'Kinh doanh', icon: '💼', color: '#F59E0B' },
+        design: { name: 'Thiết kế', icon: '🎨', color: '#EC4899' },
+        education: { name: 'Giáo dục', icon: '📚', color: '#06B6D4' },
+      };
+
+      for (const slug of missingCategories) {
+        const catData = categoryDefaults[slug];
+        if (catData) {
+          const { data: newCat, error: insertCatError } = await supabase
+            .from('categories')
+            .insert({ slug, ...catData })
+            .select('id')
+            .single();
+
+          if (!insertCatError && newCat) {
+            categoryMap[slug] = newCat.id;
+          }
+        }
+      }
+    }
 
     // 3. Generate ideas
     const ideasToCreate: Array<{
@@ -571,6 +611,10 @@ export async function GET(request: NextRequest) {
     }
 
     // 4. Insert ideas
+    if (ideasToCreate.length === 0) {
+      return errorResponse('Không có ý tưởng nào được tạo - kiểm tra lại categories', 400);
+    }
+
     const { data: createdIdeas, error: insertError } = await supabase
       .from('ideas')
       .insert(ideasToCreate)
@@ -578,18 +622,18 @@ export async function GET(request: NextRequest) {
 
     if (insertError) {
       console.error('Error inserting ideas:', insertError);
-      return errorResponse('Failed to create ideas', 500);
+      return errorResponse(`Lỗi tạo ý tưởng: ${insertError.message}`, 500);
     }
 
     return successResponse({
-      message: `Successfully generated ${createdIdeas?.length || 0} ideas`,
+      message: `Đã tạo ${createdIdeas?.length || 0} ý tưởng mới`,
       ideas: createdIdeas?.map((i: { id: string; title: string }) => ({ id: i.id, title: i.title })),
       generatedBy: MR_IDEA_USER.name,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
     console.error('Error in auto-generate ideas:', error);
-    return errorResponse('Internal server error', 500);
+    return errorResponse(`Lỗi hệ thống: ${error instanceof Error ? error.message : 'Unknown'}`, 500);
   }
 }
 
