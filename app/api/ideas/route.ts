@@ -15,6 +15,10 @@ export async function GET(request: NextRequest) {
 
     const offset = (page - 1) * limit;
 
+    // Get current user session (optional - don't require auth)
+    const { session } = await getAuthenticatedSession();
+    const userId = session?.user?.id;
+
     // Build query
     let query = supabase
       .from('ideas')
@@ -62,8 +66,52 @@ export async function GET(request: NextRequest) {
       return errorResponse('Failed to fetch ideas', 500);
     }
 
+    // If user is logged in, get their votes and saved items
+    let userVotes: Record<string, boolean> = {};
+    let userSaved: Record<string, boolean> = {};
+
+    if (userId && ideas && ideas.length > 0) {
+      const ideaIds = ideas.map((i: { id: string }) => i.id);
+
+      // Get user's votes for these ideas
+      const { data: votes } = await supabase
+        .from('votes')
+        .select('idea_id')
+        .eq('user_id', userId)
+        .in('idea_id', ideaIds);
+
+      if (votes) {
+        votes.forEach((v: { idea_id: string }) => {
+          userVotes[v.idea_id] = true;
+        });
+      }
+
+      // Get user's saved items for these ideas
+      const { data: saved } = await supabase
+        .from('saved_ideas')
+        .select('idea_id')
+        .eq('user_id', userId)
+        .in('idea_id', ideaIds);
+
+      if (saved) {
+        saved.forEach((s: { idea_id: string }) => {
+          userSaved[s.idea_id] = true;
+        });
+      }
+    }
+
+    // Transform and add user vote/saved status
+    const ideasWithUserData = (ideas || []).map((idea: { id: string }) => {
+      const transformed = transformToCamelCase(idea) as Record<string, unknown>;
+      return {
+        ...transformed,
+        userVote: userVotes[idea.id] ? 1 : 0,
+        isSaved: userSaved[idea.id] || false,
+      };
+    });
+
     return successResponse({
-      data: transformToCamelCase(ideas || []),
+      data: ideasWithUserData,
       total: count || 0,
       page,
       pageSize: limit,
