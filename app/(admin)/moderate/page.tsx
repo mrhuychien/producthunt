@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Check, X, Star, StarOff, Eye, Filter } from 'lucide-react';
+import { Shield, Check, X, Star, StarOff, Eye, Filter, Bot, Sparkles, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { Card, Button, Badge } from '@/components/ui';
 import { UserAvatar } from '@/components/shared/UserAvatar';
@@ -23,10 +23,44 @@ export default function ModeratePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<IdeaStatus | 'all'>('pending');
   const [totalCount, setTotalCount] = useState(0);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generateResult, setGenerateResult] = useState<{ success: boolean; message: string } | null>(null);
 
   useEffect(() => {
     fetchIdeas();
   }, [statusFilter]);
+
+  const handleGenerateIdeas = async () => {
+    setIsGenerating(true);
+    setGenerateResult(null);
+    try {
+      const res = await fetch('/api/cron/generate-ideas', {
+        method: 'POST',
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        setGenerateResult({
+          success: true,
+          message: `Đã tạo ${data.ideas?.length || 0} ý tưởng mới!`,
+        });
+        // Refresh the ideas list
+        fetchIdeas();
+      } else {
+        setGenerateResult({
+          success: false,
+          message: data.error || 'Không thể tạo ý tưởng',
+        });
+      }
+    } catch (error) {
+      setGenerateResult({
+        success: false,
+        message: 'Lỗi kết nối',
+      });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   const fetchIdeas = async () => {
     setIsLoading(true);
@@ -107,11 +141,62 @@ export default function ModeratePage() {
         </p>
       </motion.div>
 
-      {/* Filters */}
+      {/* Mr Idea Generator */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
+        className="mb-6"
+      >
+        <Card className="p-4 bg-gradient-to-r from-indigo-50 to-purple-50 border-indigo-200">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-indigo-500 rounded-lg">
+                <Bot className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h3 className="font-bold text-[var(--text-primary)] flex items-center gap-2">
+                  Mr Idea 🤖
+                  <Badge variant="primary" size="sm">Auto Generator</Badge>
+                </h3>
+                <p className="text-sm text-[var(--text-secondary)]">
+                  Tự động sinh 10 ý tưởng mới mỗi ngày lúc 6h sáng
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              {generateResult && (
+                <span className={`text-sm ${generateResult.success ? 'text-green-600' : 'text-red-600'}`}>
+                  {generateResult.message}
+                </span>
+              )}
+              <Button
+                onClick={handleGenerateIdeas}
+                disabled={isGenerating}
+                className="bg-indigo-500 hover:bg-indigo-600 text-white"
+              >
+                {isGenerating ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Đang tạo...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4 mr-2" />
+                    Tạo 10 ý tưởng ngay
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        </Card>
+      </motion.div>
+
+      {/* Filters */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15 }}
         className="flex items-center gap-2 mb-6 overflow-x-auto pb-2"
       >
         <Filter className="w-4 h-4 text-[var(--text-secondary)] flex-shrink-0" />
