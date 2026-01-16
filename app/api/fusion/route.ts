@@ -7,6 +7,92 @@ import {
   transformToCamelCase,
 } from '@/lib/api-utils';
 
+// Get setting from database
+async function getSetting(key: string): Promise<string | null> {
+  const supabase = createServerClient();
+  const { data } = await supabase
+    .from('app_settings')
+    .select('value')
+    .eq('key', key)
+    .single();
+
+  return data?.value || null;
+}
+
+// Generate fusion using OpenAI
+async function generateFusionWithAI(
+  ideas: { title: string; description: string }[],
+  apiKey: string,
+  model: string
+): Promise<{ title: string; description: string; concept: string } | null> {
+  try {
+    const prompt = `Bạn là một chuyên gia sáng tạo ý tưởng startup. Hãy kết hợp các ý tưởng sau thành một concept mới độc đáo và khả thi.
+
+Các ý tưởng nguồn:
+${ideas.map((idea, i) => `${i + 1}. "${idea.title}": ${idea.description}`).join('\n\n')}
+
+Hãy tạo ra một ý tưởng fusion mới bằng cách kết hợp điểm mạnh của các ý tưởng trên. Trả về JSON với format:
+{
+  "title": "Tên ý tưởng fusion (ngắn gọn, có emoji)",
+  "concept": "Mô tả ngắn concept (1-2 câu)",
+  "description": "Mô tả chi tiết bao gồm: vấn đề giải quyết, giải pháp, đối tượng khách hàng, tiềm năng thị trường, và các bước triển khai"
+}
+
+Chỉ trả về JSON, không có text khác.`;
+
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: model || 'gpt-3.5-turbo',
+        messages: [
+          {
+            role: 'system',
+            content: 'Bạn là AI chuyên sáng tạo ý tưởng startup. Luôn trả về JSON hợp lệ bằng tiếng Việt.',
+          },
+          {
+            role: 'user',
+            content: prompt,
+          },
+        ],
+        temperature: 0.8,
+        max_tokens: 1000,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error('OpenAI API error:', response.status, await response.text());
+      return null;
+    }
+
+    const data = await response.json();
+    const content = data.choices?.[0]?.message?.content;
+
+    if (!content) {
+      return null;
+    }
+
+    // Parse JSON from response
+    const jsonMatch = content.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      return null;
+    }
+
+    const parsed = JSON.parse(jsonMatch[0]);
+    return {
+      title: parsed.title || '🧬 AI Fusion',
+      description: parsed.description || '',
+      concept: parsed.concept || '',
+    };
+  } catch (error) {
+    console.error('Error calling OpenAI:', error);
+    return null;
+  }
+}
+
 // Simple AI-like fusion algorithm (can be replaced with actual AI API)
 function generateFusion(ideas: { title: string; description: string }[]): {
   title: string;
@@ -127,8 +213,25 @@ export async function POST(request: NextRequest) {
       selectedIdeas = ideas;
     }
 
-    // Generate fusion
-    const fusion = generateFusion(selectedIdeas);
+    // Try to generate fusion with AI first
+    let fusion: { title: string; description: string; concept: string };
+
+    const apiKey = await getSetting('openai_api_key');
+    const aiModel = await getSetting('ai_model') || 'gpt-3.5-turbo';
+    const fusionEnabled = await getSetting('fusion_enabled');
+
+    if (apiKey && apiKey.startsWith('sk-') && fusionEnabled !== 'false') {
+      const aiFusion = await generateFusionWithAI(selectedIdeas, apiKey, aiModel);
+      if (aiFusion) {
+        fusion = aiFusion;
+      } else {
+        // Fallback to simple algorithm
+        fusion = generateFusion(selectedIdeas);
+      }
+    } else {
+      // Use simple algorithm if no API key
+      fusion = generateFusion(selectedIdeas);
+    }
 
     // Save to database
     const { data: fusedIdea, error: insertError } = await supabase

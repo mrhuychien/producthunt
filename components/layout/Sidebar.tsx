@@ -12,6 +12,7 @@ import {
   Shield,
   BarChart3,
   Users,
+  Cog,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/lib/i18n';
@@ -36,6 +37,7 @@ export function Sidebar({ isAdmin = false }: SidebarProps) {
     { href: '/moderate', label: t.nav.moderate, icon: Shield },
     { href: '/users', label: t.nav.users, icon: Users },
     { href: '/analytics', label: t.nav.analytics, icon: BarChart3 },
+    { href: '/admin-settings', label: 'Cài đặt AI', icon: Cog },
   ];
 
   return (
