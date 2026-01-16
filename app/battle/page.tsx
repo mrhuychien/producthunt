@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Swords, Trophy, Plus, Loader2, Crown } from 'lucide-react';
+import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
 import { Button, Card, Badge } from '@/components/ui';
 import { BattleCard } from '@/components/battle';
 import { useLanguage } from '@/lib/i18n';
@@ -119,7 +121,8 @@ export default function BattlePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <Header />
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -296,7 +299,8 @@ export default function BattlePage() {
             </div>
           </motion.section>
         )}
-      </div>
+      </main>
+      <Footer />
     </div>
   );
 }

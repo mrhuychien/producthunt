@@ -17,6 +17,8 @@ import {
   Code,
   Rocket
 } from 'lucide-react';
+import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
 import { Card, Button, Badge } from '@/components/ui';
 
 interface IdeaWithBounty {
@@ -128,6 +130,7 @@ export default function BountyPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
+      <Header />
       {/* Hero Section */}
       <section className="relative overflow-hidden py-20 px-4">
         <div className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-emerald-500/10" />
@@ -478,6 +481,7 @@ export default function BountyPage() {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }
