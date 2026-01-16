@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { SlidersHorizontal } from 'lucide-react';
+import { SlidersHorizontal, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Button, Badge } from '@/components/ui';
@@ -28,6 +28,9 @@ export default function IdeasPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
   const [sortBy, setSortBy] = useState<SortOption>('popular');
   const [totalCount, setTotalCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const pageSize = 10;
 
   // Fetch categories on mount
   useEffect(() => {
@@ -52,6 +55,8 @@ export default function IdeasPage() {
     try {
       const params = new URLSearchParams();
       params.set('sortBy', sortBy);
+      params.set('page', currentPage.toString());
+      params.set('limit', pageSize.toString());
       if (search) params.set('search', search);
       if (selectedCategory) params.set('category', selectedCategory);
 
@@ -62,11 +67,17 @@ export default function IdeasPage() {
       const data = await res.json();
       setIdeas(data.data || []);
       setTotalCount(data.total || 0);
+      setTotalPages(data.totalPages || 1);
     } catch (err) {
       setError('Failed to load ideas. Please try again.');
     } finally {
       setIsLoading(false);
     }
+  }, [search, selectedCategory, sortBy, currentPage]);
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
   }, [search, selectedCategory, sortBy]);
 
   useEffect(() => {
@@ -272,6 +283,83 @@ export default function IdeasPage() {
             />
           )}
         </motion.div>
+
+        {/* Pagination */}
+        {totalPages > 1 && !isLoading && ideas.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="mt-8 flex items-center justify-center gap-2"
+          >
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+            >
+              <ChevronLeft className="w-4 h-4 mr-1" />
+              Trước
+            </Button>
+
+            <div className="flex items-center gap-1">
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                let pageNum: number;
+                if (totalPages <= 5) {
+                  pageNum = i + 1;
+                } else if (currentPage <= 3) {
+                  pageNum = i + 1;
+                } else if (currentPage >= totalPages - 2) {
+                  pageNum = totalPages - 4 + i;
+                } else {
+                  pageNum = currentPage - 2 + i;
+                }
+
+                return (
+                  <Button
+                    key={pageNum}
+                    variant={currentPage === pageNum ? 'primary' : 'ghost'}
+                    size="sm"
+                    onClick={() => setCurrentPage(pageNum)}
+                    className="w-10"
+                  >
+                    {pageNum}
+                  </Button>
+                );
+              })}
+
+              {totalPages > 5 && currentPage < totalPages - 2 && (
+                <>
+                  <span className="px-2 text-[var(--text-secondary)]">...</span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setCurrentPage(totalPages)}
+                    className="w-10"
+                  >
+                    {totalPages}
+                  </Button>
+                </>
+              )}
+            </div>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+            >
+              Sau
+              <ChevronRight className="w-4 h-4 ml-1" />
+            </Button>
+          </motion.div>
+        )}
+
+        {/* Page info */}
+        {totalPages > 1 && !isLoading && (
+          <p className="text-center text-sm text-[var(--text-secondary)] mt-4">
+            Trang {currentPage} / {totalPages} ({totalCount} vấn đề)
+          </p>
+        )}
       </main>
 
       <Footer />

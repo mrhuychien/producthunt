@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createServerClient } from '@/lib/supabase';
 import {
   getAuthenticatedSession,
   successResponse,
@@ -19,6 +19,7 @@ export async function GET(request: NextRequest) {
       return errorResponse('Idea ID is required');
     }
 
+    const supabase = createServerClient();
     const offset = (page - 1) * limit;
 
     // Get top-level comments (no parent)
@@ -43,6 +44,7 @@ export async function GET(request: NextRequest) {
     }
 
     return successResponse({
+      success: true,
       data: transformToCamelCase(comments || []),
       total: count || 0,
       page,
@@ -74,6 +76,8 @@ export async function POST(request: NextRequest) {
     if (content.length > 2000) {
       return errorResponse('Comment must be less than 2000 characters');
     }
+
+    const supabase = createServerClient();
 
     // Check if idea exists
     const { data: idea, error: ideaError } = await supabase
@@ -119,7 +123,7 @@ export async function POST(request: NextRequest) {
       return errorResponse('Failed to create comment', 500);
     }
 
-    return successResponse({ data: transformToCamelCase(comment) }, 201);
+    return successResponse({ success: true, data: transformToCamelCase(comment) }, 201);
   } catch (error) {
     console.error('Error in POST /api/comments:', error);
     return errorResponse('Internal server error', 500);
