@@ -60,6 +60,7 @@ export async function POST(
       // If voting for same idea, do nothing
       if (existingVote.voted_idea_id === ideaId) {
         return successResponse({
+          success: true,
           data: { message: 'Bạn đã vote cho ý tưởng này rồi', alreadyVoted: true },
         });
       }
@@ -83,6 +84,7 @@ export async function POST(
         .eq('id', battleId);
 
       return successResponse({
+        success: true,
         data: {
           message: 'Đã đổi vote',
           votedFor: ideaId,
@@ -111,6 +113,7 @@ export async function POST(
       .eq('id', battleId);
 
     return successResponse({
+      success: true,
       data: {
         message: 'Vote thành công!',
         votedFor: ideaId,

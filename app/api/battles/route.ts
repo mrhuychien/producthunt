@@ -118,6 +118,7 @@ export async function GET(request: NextRequest) {
     }
 
     return successResponse({
+      success: true,
       data: {
         battles: battlesWithIdeas,
         champion,
@@ -260,6 +261,7 @@ export async function POST(request: NextRequest) {
     const transformed = transformToCamelCase<Record<string, unknown>>(battle);
 
     return successResponse({
+      success: true,
       data: {
         ...transformed,
         idea1: transformToCamelCase(ideas?.find(i => i.id === idea1.id)),
