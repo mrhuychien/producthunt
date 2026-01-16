@@ -170,7 +170,7 @@ export async function POST(
 
     if (error) {
       console.error('Error creating bounty:', error);
-      return errorResponse('Không thể tạo bounty', 500);
+      return errorResponse(`Không thể tạo bounty: ${error.message}`, 500);
     }
 
     // Get new total
