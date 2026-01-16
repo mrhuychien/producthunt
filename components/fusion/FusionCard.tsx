@@ -1,8 +1,9 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { Dna, ArrowRight, ThumbsUp } from 'lucide-react';
-import { Card, Badge } from '@/components/ui';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Dna, ArrowRight, ThumbsUp, ChevronDown, ChevronUp } from 'lucide-react';
+import { Card, Badge, Button } from '@/components/ui';
 import { cn, formatNumber } from '@/lib/utils';
 import type { FusedIdea, Idea } from '@/types';
 
@@ -13,6 +14,60 @@ interface FusionCardProps {
 }
 
 export function FusionCard({ fusion, onVote, hasVoted }: FusionCardProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  // Format description with markdown-like rendering
+  const formatDescription = (desc: string) => {
+    if (!desc) return null;
+
+    return desc.split('\n').map((line, i) => {
+      // Headers
+      if (line.startsWith('## ')) {
+        return (
+          <h3 key={i} className="text-lg font-bold text-[var(--text-primary)] mt-4 mb-2">
+            {line.replace('## ', '')}
+          </h3>
+        );
+      }
+      if (line.startsWith('### ')) {
+        return (
+          <h4 key={i} className="text-base font-semibold text-[var(--text-primary)] mt-3 mb-1">
+            {line.replace('### ', '')}
+          </h4>
+        );
+      }
+      // List items
+      if (line.match(/^\d+\./)) {
+        return (
+          <p key={i} className="text-sm text-[var(--text-secondary)] ml-4 my-1">
+            {line}
+          </p>
+        );
+      }
+      // Bold text
+      if (line.includes('**')) {
+        const parts = line.split(/\*\*(.*?)\*\*/g);
+        return (
+          <p key={i} className="text-sm text-[var(--text-secondary)] my-1">
+            {parts.map((part, j) =>
+              j % 2 === 1 ? <strong key={j} className="text-[var(--text-primary)]">{part}</strong> : part
+            )}
+          </p>
+        );
+      }
+      // Empty lines
+      if (!line.trim()) {
+        return <div key={i} className="h-2" />;
+      }
+      // Regular text
+      return (
+        <p key={i} className="text-sm text-[var(--text-secondary)] my-1">
+          {line}
+        </p>
+      );
+    });
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -59,9 +114,51 @@ export function FusionCard({ fusion, onVote, hasVoted }: FusionCardProps) {
           </div>
         </div>
 
-        {/* Description Preview */}
-        <div className="prose prose-sm max-w-none text-[var(--text-secondary)] mb-4 line-clamp-3">
-          {fusion.description?.split('\n')[0]}
+        {/* Description - Collapsible */}
+        <div className="mb-4">
+          <AnimatePresence initial={false}>
+            {isExpanded ? (
+              <motion.div
+                key="expanded"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+                className="overflow-hidden"
+              >
+                <div className="bg-white/50 rounded-lg p-4 border border-purple-100">
+                  {formatDescription(fusion.description)}
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="collapsed"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="text-sm text-[var(--text-secondary)] line-clamp-3"
+              >
+                {fusion.description?.split('\n').slice(0, 3).join(' ').replace(/[#*]/g, '')}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="flex items-center gap-1 mt-2 text-sm text-purple-600 hover:text-purple-700 font-medium"
+          >
+            {isExpanded ? (
+              <>
+                <ChevronUp className="w-4 h-4" />
+                Thu gọn
+              </>
+            ) : (
+              <>
+                <ChevronDown className="w-4 h-4" />
+                Xem chi tiết
+              </>
+            )}
+          </button>
         </div>
 
         {/* Actions */}
