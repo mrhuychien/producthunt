@@ -85,15 +85,25 @@ export async function POST(request: NextRequest) {
     let selectedIdeas;
 
     if (random || !ideaIds || ideaIds.length === 0) {
-      // Get random ideas
-      const { data: allIdeas, error } = await supabase
+      // Get random ideas - try approved first, fallback to any
+      let { data: allIdeas, error } = await supabase
         .from('ideas')
         .select('id, title, description')
         .eq('status', 'approved')
         .limit(50);
 
+      // Fallback to any ideas if not enough approved
+      if (!allIdeas || allIdeas.length < 2) {
+        const result = await supabase
+          .from('ideas')
+          .select('id, title, description')
+          .limit(50);
+        allIdeas = result.data;
+        error = result.error;
+      }
+
       if (error || !allIdeas || allIdeas.length < 2) {
-        return errorResponse('Không đủ ý tưởng để fusion', 400);
+        return errorResponse('Không đủ ý tưởng để fusion. Cần ít nhất 2 ý tưởng.', 400);
       }
 
       // Shuffle and pick
@@ -152,6 +162,7 @@ export async function POST(request: NextRequest) {
     const transformedFusion = transformToCamelCase<Record<string, unknown>>(fusedIdea);
 
     return successResponse({
+      success: true,
       data: {
         ...transformedFusion,
         sourceIdeas: transformToCamelCase(sourceIdeas),
@@ -204,6 +215,7 @@ export async function GET(request: NextRequest) {
     );
 
     return successResponse({
+      success: true,
       data: fusionsWithSources,
       total: count || 0,
     });
